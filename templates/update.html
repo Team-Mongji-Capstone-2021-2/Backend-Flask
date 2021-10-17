@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th = "https://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    <link href="/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="h-100">
+<div class="authincation h-100">
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-md-6">
+                <div class="authincation-content">
+                    <div class="row no-gutters">
+                        <div class="col-xl-12">
+                            <div class="auth-form">
+                                <h4 class="text-center mb-4">회원정보 수정</h4>
+
+                                <form class = "userUpdate" th:action = "@{'/user/' + ${principal.id} + '/update'}" method="post">
+                                    <input type="hidden" name="_method" value="put"/>
+                                    <input type="hidden" name = "id" th:value = "${principal.id}"/>
+
+                                    <div class="form-group">
+                                        <label><strong>아이디 (4자 이상, 15자 이하)</strong></label>
+                                        <input type="text" class="form-control" name = "username" minlength="4" maxlength = "15" th:value="${principal.username}" readonly = "readonly" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>비밀번호 (4자 이상, 20자 이하)</strong></label>
+                                        <input type="password" class="form-control" name = "password" minlength="4" maxlength = "20" required = "required" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>이름</strong></label>
+                                        <input type="text" class="form-control" name = "name" maxlength = "20" th:value="${principal.name}" required= "required" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Email</strong></label>
+                                        <input type="email" class="form-control" name = "email" th:value="${principal.email}" readonly = "readonly"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>성별</strong></label><br>
+                                        <input type="email" class="form-control" name = "gender" th:value="${principal.gender}" readonly = "readonly"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>몸무게</strong></label>
+                                        <input type="text" class="form-control" name = "weight" maxlength = "3" th:value="${principal.weight}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>키</strong></label>
+                                        <input type="text" class="form-control" name = "height" maxlength = "3" th:value="${principal.height}" />
+                                    </div>
+                                    <button class="btn btn-primary btn-block">회원정보 수정</button>
+                                </form>
+                                <div class="new-account mt-3">
+                                    <p>홈으로 돌아가기 <a class="text-primary" href="/home">Home</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--**********************************
+    Scripts
+***********************************-->
+<!-- Required vendors -->
+<script th:src="@{/vendor/global/global.min.js}"></script>
+<script th:src="@{/js/quixnav-init.js}"></script>
+<script th:src="@{/js/update.js}"></script>
+<!--endRemoveIf(production)-->
+</body>
+
+</html>

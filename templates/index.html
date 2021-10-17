@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th = "https://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon.png">
+    <link rel="stylesheet" href="./vendor/owl-carousel/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="./vendor/owl-carousel/css/owl.theme.default.min.css">
+    <link href="./vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <h1>Hello World!</h1>
+
+
+    <div class="new-account mt-3">
+        <p>회원정보 수정하기 <a class="text-primary" th:href="@{'/user/' + ${principal.id} + '/update'}">회원정보 수정</a></p>
+    </div>
+
+    <div class="new-account mt-3">
+        <p>로그아웃 <a class="text-primary" th:href="@{/logout}">로그 아웃</a></p>
+    </div>
+
+    <div>
+        <form method="post" action="/file/insertProc" class="well form-vertical" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <button type="submit" class="btn">{{actionLabel}}</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

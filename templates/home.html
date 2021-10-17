@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png">
+  <link rel="stylesheet" href="/static/vendor/owl-carousel/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/static/vendor/owl-carousel/css/owl.theme.default.min.css">
+  <link href="/static/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet">
+  <link href="/static/css/style.css" rel="stylesheet">
+
+  <style>
+    div.slide {width:1200px; height:300px; overflow:hidden;}
+    div.slide ul {width:1200px; height:900px; position:relative;}
+    div.slide ul li {width:1200px; height:300px; float:left;}
+    </style>
+
+  <script >
+        window.onload=function() {
+            function load() {
+                if(!(File && FileReader && FileList && Blob)) {
+                    alert("Not Supported File API");
+                }
+
+                document.getElementById("inputFile").onchange = function () {
+                    var file = this.files[0];
+                    var name = file.name;
+                    var size = file.size;
+                    var reader = new FileReader();
+
+                    reader.onload = function () {
+                        var aBuf = this.result; // ArrayBuffer
+                        var dView = new DataView(aBuf);
+
+                        var validFlag = dView.getUint8(0);
+                        var year = dView.getUint8(1);
+                        var month = dView.getUint8(2);
+                        var day = dView.getUint8(3);
+                        var numRecords = dView.getInt32(4, true);
+                        var numHeaders = dView.getInt16(8, true);
+
+
+                    };
+
+                    var blob = file.slice(0, 1000);
+                    reader.readAsArrayBuffer(blob);
+                };
+            }
+            document.getElementById('h').onclick = load;
+
+
+
+
+
+
+
+            //'+' 누르고 입력받으면 location 추가
+            document.getElementById('location_plus').onclick=function(){
+                window.open("0add_location.html","input location", "width=500, height=500,top=100,left=200,location=no")
+            }
+            /*
+            var location_icon='<className="badge badge-rounded badge-outline-primary">'+location_name+'</a>';//색상 array로 두기(나중에)
+            document.getElementById('location'+index).innerHTML = location_icon;
+
+             */
+
+
+            //클릭하면 graph 바뀌기(아직은 사진 출력)
+            document.getElementById('location'+1).onclick = whenClick;
+            function whenClick(){
+                var stress_level = ["ecg.jpg"];
+                for(var i=0; i<20; i++)
+                    stress_level[i] += "";//stress graph picture link
+                $(document).ready(function () {
+                    var output = '<img src="' + stress_level[0]+ '"style="width:400px;">';//0을 index로 수정
+                    document.getElementById('cpu-load').innerHTML = output;
+                });
+            };
+
+
+
+            function whenClick1() {
+                $(document).ready(function () {
+                    //슬라이드 메뉴
+                    $('nav ul li').mouseenter(function () {
+                        $(this).children('div.submenu').stop().slideDown();
+                    })
+                    $('nav ul li').mouseleave(function () {
+                        $(this).children('div.submenu').stop().slideUp();
+                    })
+
+                    //이미지 슬라이드(위로 이동)
+                    setInterval(function () {
+                        $('div.slide ul').animate({
+                            top: '-300px'
+                        }, 600, function () {
+                            $('div.slide ul').append($('div.slide ul li').eq(0));
+                            $('div.slide ul').css("top", 0);
+                        })
+                    }, 3000)
+
+                    //모달 레이어 팝업
+                    $('li.pop').click(function () {
+                        $('div#popup_wrap').fadeIn();
+                    })
+                    $('div.close').click(function () {
+                        $('div#popup_wrap').fadeOut();
+                    })
+                })
+            }
+
+
+
+        }
+    </script>
+
+</head>
+
+<body>
+
+<!--*******************
+    Preloader start
+********************-->
+<div id="preloader">
+  <div class="sk-three-bounce">
+    <div class="sk-child sk-bounce1"></div>
+    <div class="sk-child sk-bounce2"></div>
+    <div class="sk-child sk-bounce3"></div>
+  </div>
+</div>
+<!--*******************
+    Preloader end
+********************-->
+
+
+<!--**********************************
+    Main wrapper start
+***********************************-->
+<div id="main-wrapper">
+
+  <!--**********************************
+      Nav header start
+  ***********************************-->
+  <div class="nav-header">
+    <a href="index.html" class="brand-logo">
+      <img class="logo-abbr" src="/static/images/logo.png" alt="">
+      <img class="logo-compact" src="/static/images/logo-text.png" alt="">
+      <img class="brand-title" src="/static/images/logo-text.png" alt="">
+    </a>
+    <!--sidebar-->
+    <div class="nav-control">
+      <div class="hamburger">
+        <span class="line"></span><span class="line"></span><span class="line"></span>
+      </div>
+    </div>
+  </div>
+  <!--**********************************
+      Nav header end
+  ***********************************-->
+
+  <!--**********************************
+      Header start
+  ***********************************-->
+  <div class="header">
+    <div class="header-content">
+      <nav class="navbar navbar-expand">
+        <div class="collapse navbar-collapse justify-content-between">
+          <div class="header-left">
+            <div class="search_bar dropdown">
+                                <span class="search_icon p-3 c-pointer" data-toggle="dropdown">
+                                    <i class="mdi mdi-magnify"></i>
+                                </span>
+              <div class="dropdown-menu p-0 m-0">
+                <form>
+                  <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <ul class="navbar-nav header-right">
+            <li class="nav-item dropdown header-profile">
+              <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                <i class="mdi mdi-account"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a th:href="@{'/user/' + ${principal.id} + '/update'}" class="dropdown-item">
+                  <i class="icon-user"></i>
+                  <span class="ml-2">개인정보 수정 </span>
+                </a>
+                <a href="./email-inbox.html" class="dropdown-item">
+                  <i class="icon-envelope-open"></i>
+                  <span class="ml-2">Inbox </span>
+                </a>
+                <a th:href="@{'/logout'}" class="dropdown-item">
+                  <i class="icon-key"></i>
+                  <span class="ml-2">Logout </span>
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <!--**********************************
+      Header end ti-comment-alt
+  ***********************************-->
+
+
+  <!--**********************************
+      Content body start
+  ***********************************-->
+  <div class="content-body">
+    <div class="container-fluid">
+      <!-- row -->
+      <div class="row">
+        <!--장소별 ecg-->
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header d-block">
+              <h4 class="card-title">장소 별 ECG </h4>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">home</h4>
+              </div>
+              <div class="card-body">
+                <div class="cpu-load-chart">
+                  <div id="cpu-load" ><img src="ecg.jpg"></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="bootstrap-badge">
+                  <a id="location1" href="#" class="badge badge-primary">home</a>
+                  <a id="location2" href="#" class="badge badge-secondary">school</a>
+                  <a id="location3" href="#" class="badge badge-success">office</a>
+                  <a id="location4" href="#" class="badge badge-danger">park</a>
+                  <a id="location5" href="javascript:void()" class="badge badge-warning">sea</a>
+                  <a id="location6" href="javascript:void()" class="badge badge-info">mountain</a>
+                  <a id="location7" href="javascript:void()" class="badge badge-light">cafe</a>
+                  <a id="location_plus" href="javascript:void()" class="badge badge-dark">+</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!--스트레스정도-->
+        <div class="col-lg-4 col-sm-6">
+          <div class="card">
+            <div class="stat-widget-two card-body">
+              <div class="stat-content">
+                <div class="stat-text">"home"에서의 평균 스트레스 지수</div>
+                <div class="stat-digit">7800</div>
+              </div>
+              <div class="progress">
+                <div class="progress-bar progress-bar-primary w-75" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="stat-widget-two card-body">
+              <div class="stat-content">
+                <div class="stat-text">부정맥 검출 여부</div>
+                <div class="stat-digit">500</div>
+              </div>
+              <div class="progress">
+                <div class="progress-bar progress-bar-warning w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- 부정맥검출그래프-->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header d-block">
+              <h4 class="card-title">부정맥 검출 그래프 </h4>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <img src="linechart.jpg">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Country</h4>
+            </div>
+            <div class="card-body">
+              <div id="vmap13" class="vmap"></div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!--스트레스 장소 순위-->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">스트레스 장소 순위</h4>
+            </div>
+            <div class="card-body">
+              <div class="current-progress">
+                <div class="progress-content py-2">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="progress-text">home</div>
+                    </div>
+                    <div class="col-lg-8">
+                      <div class="current-progressbar">
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-primary w-40" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                            40%
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-content py-2">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="progress-text">school</div>
+                    </div>
+                    <div class="col-lg-8">
+                      <div class="current-progressbar">
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-primary w-60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                            60%
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-content py-2">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="progress-text">bus</div>
+                    </div>
+                    <div class="col-lg-8">
+                      <div class="current-progressbar">
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-primary w-70" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                            70%
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-content py-2">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="progress-text">cafe</div>
+                    </div>
+                    <div class="col-lg-8">
+                      <div class="current-progressbar">
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-primary w-90" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
+                            90%
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h1 id="h">hi</h1>
+
+
+    </div>
+  </div>
+
+
+
+  <!--**********************************
+      Content body end
+  ***********************************-->
+
+
+  <!--**********************************
+      Footer start
+  ***********************************-->
+  <div class="footer">
+    <div class="copyright">
+      <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p>
+      <p>Distributed by <a href="https://themewagon.com/" target="_blank">Themewagon</a></p>
+    </div>
+  </div>
+
+  <!--**********************************
+      Footer end
+  ***********************************-->
+
+  <!--**********************************
+     Support ticket button start
+  ***********************************-->
+
+  <!--**********************************
+     Support ticket button end
+  ***********************************-->
+
+
+</div>
+<!--**********************************
+    Main wrapper end
+***********************************-->
+
+<!--**********************************
+    Scripts
+***********************************-->
+<!-- Required vendors -->
+<script src="/static/vendor/global/global.min.js"></script>
+<script src="/static/js/quixnav-init.js"></script>
+<script src="/static/js/custom.min.js"></script>
+
+
+<!-- Vectormap -->
+<script src="/static/vendor/raphael/raphael.min.js"></script>
+<script src="/static/vendor/morris/morris.min.js"></script>
+
+
+<script src="/static/vendor/circle-progress/circle-progress.min.js"></script>
+<script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+
+<script src="/static/vendor/gaugeJS/dist/gauge.min.js"></script>
+
+<!--  flot-chart js -->
+<script src="/static/vendor/flot/jquery.flot.js"></script>
+<script src="/static/vendor/flot/jquery.flot.resize.js"></script>
+
+<!-- Owl Carousel -->
+<script src="./vendor/owl-carousel/js/owl.carousel.min.js"></script>
+
+<!-- Counter Up -->
+<script src="/static/vendor/jqvmap/js/jquery.vmap.min.js"></script>
+<script src="/static/vendor/jqvmap/js/jquery.vmap.usa.js"></script>
+<script src="/static/vendor/jquery.counterup/jquery.counterup.min.js"></script>
+
+
+<script src="/static/js/dashboard/dashboard-1.js"></script>
+
+</body>
+
+</html>
