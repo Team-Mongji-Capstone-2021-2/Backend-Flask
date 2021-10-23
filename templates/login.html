@@ -1,70 +1,39 @@
-<!DOCTYPE html>
-<html lang="en" class="h-100"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th = "https://www.thymeleaf.org">
+{% extends 'layout/base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png" />
-    <link href="/static/css/style.css" rel="stylesheet" />
+{% block head %}
+  <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
+{% endblock %}
 
-</head>
+{% block body %}
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body text-center pb-0">
+            <img src="/static/image/profile.png" class="w-75 rounded-circle">
+            <h4 class="mt-2">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h4>
+            <h5 class="mt-2">로그인</h5>
 
-<body class="h-100">
-<div class="authincation h-100">
-    <div class="container-fluid h-100">
-        <div class="row justify-content-center h-100 align-items-center">
-            <div class="col-md-6">
-                <div class="authincation-content">
-                    <div class="row no-gutters">
-                        <div class="col-xl-12">
-                            <div class="auth-form">
-                                <h4 class="text-center mb-4">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h4>
-                                <h4 class="text-center mb-4">캡스톤 디자인2 (1조)</h4>
-                                <div th:if="${param.error}">
-                                    <p th:text="${exception}" class="alert alert-danger"></p>
-                                </div>
-                                <div th:if="${param.logout}" class="alert alert-primary" role="alert">
-                                    You have been logged out
-                                </div>
-                                <form action="/login" method="POST">
-                                    <div class="form-group">
-                                        <label><strong>Id</strong></label>
-                                        <input type="text" class="form-control" name="username">
-                                    </div>
-                                    <div class="form-group">
-                                        <label><strong>Password</strong></label>
-                                        <input type="password" class="form-control" name ="password">
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary btn-block">로그인</button>
-                                    </div>
-                                </form>
-                                <div class="new-account mt-3">
-                                    <p>계정이 없으신가요? <a class="text-primary" th:href="@{/register}">회원가입</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <form action="/user/signin" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                  {{ form.username(class='form-control mt-4', placeholder='아이디') }}
+                  <div class="invalid-feedback d-block text-left">
+                    {{ form.username.errors[0] }}
+                  </div>
                 </div>
-            </div>
+                <div class="form-group">
+                  {{ form.password(class='form-control mt-3', placeholder='비밀번호') }}
+                  <div class="invalid-feedback d-block text-left">
+                    {{ form.password.errors[0] }}
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">로그인</button>
+            </form>
+            <a href="/user/signup" class="text-left"><p class="small">회원가입</p></a>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
-
-<!--**********************************
-    Scripts
-***********************************-->
-<!-- Required vendors -->
-<script src="/static/vendor/global/global.min.js"></script>
-<script src="/static/js/quixnav-init.js"></script>
-<script src="/static/js/custom.min.js"></script>
-
-</body>
-
-</html>
+  </div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'layout/base.html' %}
+
+{% block head %}
+  <title>데이터 입력</title>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <h6 class="mt-2">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h4>
+            <h5 class="mt-2">데이터 입력</h5>
+
+            <form class = "data_input" action = "/create" method = "post">
+                <div class ="form-group">
+                    <label><strong>장소</strong></label>
+                    <input type="text" class="form-control" id = "local" name = "local" maxlength = "15" required = "required"/>
+                </div>
+                <div class ="form-group">
+                    <label><strong>시간</strong></label>
+                    <input type="text" class="form-control" id = "DateTime" name = "DateTime" maxlength = "15" required = "required"/>
+                </div>
+                <div>
+                    <label><strong>업로드할 데이터</strong></label>
+                    <input type="file" name="files1" accept="image/*" onchange="previewImage(this)" />
+                    <div id="preview"></div>
+                </div>
+                <button id="able" class="btn btn-primary mr-2" id="js-programmatic-enable">확인</button>
+            </form>
+            <a href="/index" class="text-left"><p class="small">홈화면으로</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
