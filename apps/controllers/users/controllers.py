@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_user, logout_user
-
+import hashlib
 from apps.common.auth import SHA256, already_signin
 from apps.controllers.users.forms import SignInForm, SignUpForm
 from apps.database.models import User
@@ -16,6 +16,9 @@ def signin():
 
     if form.validate_on_submit():
         user = User.query.filter(User.username == form.username.data).first()
+        print("username:", user.username, ", password: ", user.password)
+        print("form_username:", form.username.data, ", form_password: ", form.password.data)
+        print(SHA256.encrypt(form.password.data))
         if not user:
             form.username.errors.append('가입하지 않은 아이디 입니다.')
             return render_template('login.html', form=form)
@@ -52,18 +55,17 @@ def signup():
 
         if form.email.errors or form.username.errors:
             return render_template('register.html', form=form)
-
         user = User(username=form.username.data, password=SHA256.encrypt(form.password.data), name=form.name.data, email=form.email.data,
             gender=form.gender.data, height=form.height.data, weight=form.weight.data)
         db.session.add(user)
         db.session.commit()
 
         login_user(user)
-        return redirect(url_for('users.signin'))
+        return redirect(url_for('index.index'))
     return render_template('register.html', form=form)
 
 
-@app.route('signout', methods=['GET'])
+@app.route('/signout', methods=['GET'])
 def signout():
     logout_user()
-    return redirect(url_for('users.signin'))
+    return redirect(url_for('user.signin'))

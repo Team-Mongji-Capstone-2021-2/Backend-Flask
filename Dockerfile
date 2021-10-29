@@ -1,5 +1,5 @@
 FROM python:3.9
-MAINTAINER gureuso <wyun13043@gmail.com>
+MAINTAINER boyung <boyung1021@gmail.com>
 
 USER root
 WORKDIR /root
@@ -9,7 +9,7 @@ RUN apt-get -y update
 RUN apt-get -y install python3-pip
 
 # flask
-RUN git clone https://github.com/gureuso/flask.git
+RUN git clone https://github.com/Team-Mongji-Capstone-2021-2/Backend-Flask.git
 WORKDIR /root/flask
 RUN pip install virtualenv
 RUN virtualenv venv

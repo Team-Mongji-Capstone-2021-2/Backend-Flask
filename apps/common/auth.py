@@ -30,7 +30,7 @@ def signin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not current_user.is_authenticated:
-            return redirect(url_for('users.signin'))
+            return redirect(url_for('user.signin'))
         return func(*args, **kwargs)
     return wrapper
 

@@ -1,0 +1,27 @@
+{% extends 'layout/base.html' %}
+
+{% block head %}
+  <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    {% include('layout/nav.html') %}
+    <div class="card-group">
+      {% for datainfo in datainfos %}
+        <div class="card" style="">
+            <img class="card-img-top" src="{{ datainfo.image }}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{ datainfo.local }}</h5>
+              <p class="card-text">{{ datainfo.time }}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <<li class="list-group-item">스트레스 여부: {{ datainfo.stressData }}</li>
+            <li class="list-group-item">부정맥 여부: {{ datainfo.arrhythmia }}</li>
+            <li class="list-group-item">PAC 여부: {{ datainfo.pac }}</li>
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

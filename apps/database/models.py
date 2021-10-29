@@ -32,27 +32,31 @@ Test = get_model(TestModel)
 
 
 
-class DataMixin: #데이터 모델을 나타내는 객체 선언
+class DatainfoMixin: #데이터 모델을 나타내는 객체 선언
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     local = db.Column(db.String(32))
-    DataTime = db.Column(db.String(32))
-    stressData = db.Column(db.Boolean)
-    arrhythmia = db.Column(db.Boolean)
-    image = db.Column(db.String(32))
+    time = db.Column(db.String(32))
+    stressData = db.Column(db.Boolean, default = False)
+    arrhythmia = db.Column(db.Boolean, default = False)
+    image = db.Column(db.String(256))
+    pac = db.Column(db.Boolean, default = False)
+    pvc = db.Column(db.Boolean, default = False)
+    rbbb = db.Column(db.Boolean, default = False)
+    lbbb = db.Column(db.Boolean, default = False)
 
-class TestDataModel(DataMixin, db.Model):
-    __tablename__ = 'test_data'
+class TestDatainfoModel(DatainfoMixin, db.Model):
+    __tablename__ = 'test_datainfos'
 
-    user_id = db.Column(db.Integer(), db.ForeignKey('test_user.id'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('test_users.id'))
 
-class DataModel(DataMixin, db.Model):
-    __tablename__ = 'data'
+class DatainfoModel(DatainfoMixin, db.Model):
+    __tablename__ = 'datainfos'
 
-    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
-    test_model = TestDataModel
+    test_model = TestDatainfoModel
 
-Data = get_model(DataModel)
+Datainfo = get_model(DatainfoModel)
 
 
 
@@ -60,21 +64,21 @@ class UserMixin:
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(32), unique=True, nullable=False)
     username = db.Column(db.String(32), unique=True, nullable=False)
-    password = db.Column(db.String(8), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
     gender = db.Column(db.String(32), nullable=False)
     height = db.Column(db.Integer, nullable=False)
     weight = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(8), nullable=False)
 
 class TestUserModel(UserMixin, flask_login.UserMixin, db.Model):
-    __tablename__ = 'test_user'
+    __tablename__ = 'test_users'
 
-    datas = db.relationship('TestDataModel', backref = 'user')
+    datas = db.relationship('TestDatainfoModel', backref = 'user')
 
 class UserModel(UserMixin, flask_login.UserMixin, db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
-    datas = db.relationship('DataModel', backref ='user')
+    datainfos = db.relationship('DatainfoModel', backref ='user')
 
     test_model = TestUserModel
 

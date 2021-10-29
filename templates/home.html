@@ -1,102 +1,47 @@
 {% extends 'layout/base.html' %}
 
 {% block head %}
-  <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
+  <title>datainfos</title>
 {% endblock %}
 
 {% block body %}
-<div class="content-body">
-  <div class="container-fluid">
-    <!-- row -->
-    <div class="row">
-      <!--장소별 ecg-->
-      <div class="col-lg-8">
-        <div class="card">
-          <div class="card-header d-block">
-            <h4 class="card-title">장소 별 ECG </h4>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <h4 class="card-title">home</h4>
-            </div>
-            <div class="card-body">
-              <div class="cpu-load-chart">
-                <div id="cpu-load" ><img src="ecg.jpg"></div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              <div class="bootstrap-badge">
-                <a id="location1" href="#" class="badge badge-primary">home</a>
-                <a id="location2" href="#" class="badge badge-secondary">school</a>
-                <a id="location3" href="#" class="badge badge-success">office</a>
-                <a id="location4" href="#" class="badge badge-danger">park</a>
-                <a id="location5" href="javascript:void()" class="badge badge-warning">sea</a>
-                <a id="location6" href="javascript:void()" class="badge badge-info">mountain</a>
-                <a id="location7" href="javascript:void()" class="badge badge-light">cafe</a>
-                <a id="location_plus" href="javascript:void()" class="badge badge-dark">+</a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!--스트레스정도-->
-      <div class="col-lg-4 col-sm-6">
-        <div class="card">
-          <div class="stat-widget-two card-body">
-            <div class="stat-content">
-              <div class="stat-text">"home"에서의 평균 스트레스 지수</div>
-              <div class="stat-digit">7800</div>
-            </div>
-            <div class="progress">
-              <div class="progress-bar progress-bar-primary w-75" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="stat-widget-two card-body">
-            <div class="stat-content">
-              <div class="stat-text">부정맥 검출 여부</div>
-              <div class="stat-digit">500</div>
-            </div>
-            <div class="progress">
-              <div class="progress-bar progress-bar-warning w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-    <!-- 부정맥검출그래프-->
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="card">
-          <div class="card-header d-block">
-            <h4 class="card-title">부정맥 검출 그래프 </h4>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              <img src="linechart.jpg">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-header">
-            <h4 class="card-title">Country</h4>
-          </div>
+  <div id="container">
+    {% include('layout/nav.html') %}
+    <div class="card-group">
+      {% if not datainfos1 %}
+        <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+      {% endif %}
+      {% for datainfo in datainfos1 %}
+        <div class="card" style="">
+          <img class="card-img-top" src="{{ datainfo.image }}" alt="Card image cap">
           <div class="card-body">
-            <div id="vmap13" class="vmap"></div>
+            <h5 class="card-title">{{ datainfo.local }}</h5>
+            <p class="card-text">{{ datainfo.time }}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">스트레스 여부: {{ datainfo.stressData }}</li>
+            <li class="list-group-item">부정맥 여부: {{ datainfo.arrhythmia }}</li>
+            <li class="list-group-item">PAC 여부: {{ datainfo.pac }}</li>
+            <li class="list-group-item">PVC 여부: {{ datainfo.pvc }}</li>
+            <li class="list-group-item">RBBB 여부: {{ datainfo.LBBB }}</li>
+            <li class="list-group-item">LBBB 여부: {{ datainfo.LBBB }}</li>
+          </ul>
+        </div>
+      {% endfor %}
+      {{ macros.pagination_index(pagination1, 'index.index') }}
+    </div>
+  </div>
+
+  <div id="container">
+    <div class="card-group">
+      {% for datainfo in datainfos2 %}
+        <div class="card" style="">
+          <div class="card-body">
+            <h5 class="card-title">{{ datainfo.local }}</h5>
+            <p class="card-text">{{ pagination2.count }}</p>
           </div>
         </div>
-      </div>
-
-
+      {% endfor %}
     </div>
+  </div>
 {% endblock %}

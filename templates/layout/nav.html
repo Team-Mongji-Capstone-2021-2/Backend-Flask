@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+  <a class="navbar-brand"  href="{{ url_for('index.index') }}">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</a>
+  
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('index.index') }}">HOME</a>
+        </li>
+      </ul>
+    </div>
+  
+    <div class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ current_user.name }}
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="{{ url_for('user.signout') }}">signout</a>
+        <a class="dropdown-item" href="{{ url_for('index.create') }}">데이터 추가</a>
+      </div>
+    </div>
