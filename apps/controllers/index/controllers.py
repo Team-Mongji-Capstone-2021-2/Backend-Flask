@@ -20,15 +20,16 @@ def index():
     page = int(args.get('page') or 1)
     per_page = 1
 
-    pagination1 = Datainfo.query.order_by(Datainfo.id.desc()).paginate(page, per_page)
+    pagination1 = Datainfo.query.filter(Datainfo.user_id == current_user.id).order_by(Datainfo.id.desc()).paginate(page, per_page)
     datainfos1 = pagination1.items
 
-    #datainfos2 = db.session.query(Datainfo, db.func.count(Datainfo.local)).group_by(Datainfo.local)
-    pagination2 = db.session.query(Datainfo.local, func.count('*')).group_by(Datainfo.local).paginate(page, per_page);
-    #pagination2 = Datainfo.query.order_by((Datainfo.func.count(Datainfo.local)).decs()).paginate(page, per_page)
+    pagination2 = Datainfo.session.query(Datainfo.local, func.count('*').label('count'), func.count(Datainfo.stressData ==0).label('arrythmia_count')).group_by(Datainfo.local).filter_by(Datainfo.id==current_user.id);
     datainfos2 = pagination2.items
 
-    return render_template('home.html', datainfos1=datainfos1, pagination1=pagination1, datainfos2=datainfos2, pagination2=pagination2)
+    pagination3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == False).order_by(Datainfo.id.desc()).paginate(page, per_page)
+    datainfos3 = pagination3.items
+
+    return render_template('home.html', datainfos1=datainfos1, pagination1=pagination1)
 
 
 @app.route('/create', methods=['GET','POST'])
