@@ -23,10 +23,7 @@ def index():
     pagination1 = Datainfo.query.filter(Datainfo.user_id == current_user.id).order_by(Datainfo.id.desc()).paginate(page, per_page)
     datainfos1 = pagination1.items
 
-    datainfos2 = db.session.query(Datainfo.local, func.count(Datainfo.local).label('count'), func.count(Datainfo.stressData==False).label('arrythmia_value')).group_by(Datainfo.local).filter(Datainfo.user_id==current_user.id).order_by((func.count(Datainfo.stressData==False)/func.count(Datainfo.stressData)).desc()).all();
-    print(datainfos2)
-    #datainfos2 = pagination2.items
-    #, (func.count('*') / 
+    datainfos2 = db.session.query(Datainfo.local, func.count(Datainfo.local).label('count'), func.count(Datainfo.stressData==True).label('stress_count')).group_by(Datainfo.local).filter(Datainfo.user_id==current_user.id).order_by((func.count(Datainfo.stressData==False)/func.count(Datainfo.stressData)).desc()).all();
     
     pagination3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).paginate(page, per_page)
     datainfos3 = pagination3.items

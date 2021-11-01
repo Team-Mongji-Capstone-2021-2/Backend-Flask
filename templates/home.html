@@ -10,142 +10,166 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
     <style>
-        .font_white{font-family:verdana; font-weight:bold; color:#FFFACD;}
-        .right_photo{height:500px; float:left; margin-left:30px;}
+
+        .wrapper {
+            display: flex;
+        }
+
+        .wrapper > div {
+            flex: 1;
+        }
+
+        .left50{float:left; margin-left:100px;}
+        .left100{float:left; margin-left:100px;}
+        .right100{float:right; margin-right:100px}
+
+        .font_white{font-family:verdana; font-weight:bold; color:white;}
         .right_write{font-size:18px; font-family:courier; float:right; margin-left:10px;}
-        .left_photo{float:left;margin-left:100px;}
         .left_write{font-size:18px; font-family:courier; }
         .page{font-size:40px; color: black;}
+
     </style>
 </head>
 
-<body style="background-color:white;">
-    <h2 style="background-color:white; font-family:verdana; text-align:center;">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h2>
+<body style="background-color:#C5A885;">
 
-    <!--첫번째 page-->
     {% block body %}
     {% import 'layout/pagination.html' as macros %}
 
-    <div class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{ current_user.name }}
-      </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-        <a class="dropdown-item" href="{{ url_for('user.signout') }}">signout</a>
-        <a class="dropdown-item" href="{{ url_for('index.create') }}">데이터 추가</a>
-      </div>
+
+    <!--헤더-->
+    <div >
+        <img style="margin-right:100px; float:right" href="{{ url_for('user.signout') }}" src="https://img.icons8.com/material-outlined/24/000000/person-male.png"/>
+        <div style="margin-right:20px; float:right"><span href="#"><U>{{ current_user.name }}</U></span>님</div>
     </div>
-    
+    <div style="clear:both;"></div>
+
+    <div style="text-align: center" href="#" >
+        <img src="https://img.icons8.com/material-outlined/48/000000/heart-with-pulse.png"/>
+    </div>
+
+    <h2 style="font-family:verdana; text-align:center;" href="#">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h2>
+
+
+
+    <!--첫번째 page-->
+
+
     <br>
     <div>
         <ul>
-            <h1 class="font_white"><span class="page">1</span> 2 3  <span class="page">  모든 데이터 불러오기</span></h1><hr>
-            {% if not datainfos1 %}
-            <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
-          {% endif %}
-          {% for datainfo in datainfos1 %}
-            <div>
-                <p id="ecg" class="left_photo"><img src="{{ datainfo.image }}" style="width:800px;"></p><br>
-                <br>
+            <h1 class="font_white"><span class="page">1</span> 2 3 <span class="page">  모든 데이터 불러오기</span></h1>
+            <hr>
+
+            <div class="wrapper">
+                {% for datainfo in datainfos1 %}
                 <div>
-                    <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.local }}</div>
-                </div>
-                <br>
-                <br>
-                <div>
-                  <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.time }}</div>
+                    <p id="ecg" class="left100">
+                        <img style="width:800px;" src="{{ datainfo.image }}">
+                    </p>
                 </div>
                 <div>
-                  <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.pac }}</div>
+                   <div class="left50" >
+                       <br><br>
+                       <div href="#"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></div>
+                       <div>page번호</div>
+                        <p > {{ datainfo.local }} 에서의 평균 스트레스 지수  </p>
+                        <br>
+                        <div style="clear:both;"></div>
+                        <p >데이터 측정 시간 {{ datainfo.time }}</p>
+                        <div style="clear:both;"></div>
+                        <p >PAC 여부 {{ datainfo.pac }}</p>
+                        <div style="clear:both;"></div>
+                        <p >PVC 여부 {{ datainfo.pvc }}</p>
+                        <div style="clear:both;"></div>
+                        <p >LBBB 여부 {{ datainfo.lbbb }}</p>
+                        <div style="clear:both;"></div>
+                        <p >RBBB 여부 {{ datainfo.rbbb }}</p>
+                   </div>
+                    <div style="clear:both;"></div>
+                    {% endfor %}
+                    <div class="left50" >
+                      {{ macros.pagination_index(pagination1, 'index.index') }}
+                    </div>
                 </div>
-                <div>
-                  <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.pvc }}</div>
-                </div>
-                <div>
-                  <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.rbbb }}</div>
-                </div>
-                <div>
-                  <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.lbbb }}</div>
-                </div>
-            </div>
-            {% endfor %}
-            <div>
-              {{ macros.pagination_index(pagination1, 'index.index') }}
             </div>
         </ul>
     </div>
     <div style="clear:both;"></div>
     <br><br>
 
+
+
     <!--두번째 page-->
     <div>
-      <ul>
-        <h1 class="font_white">1 <span class="page">2</span> 3  <span class="page">  스트레스 받는 장소 순위 불러오기</span></h1><hr>
-        {% if not datainfos2 %}
-        <h2 class="text-center p-5">스트레스를 나타내는 데이터가 없습니다. </a></h2>
-        {% endif %}
-        {% for datainfo in datainfos2 %}
-        <div>
-            <br>
-            <div>
-                <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.local }}</div>
+        <ul>
+            <h1 class="font_white">1 <span class="page">2</span> 3 <span class="page">  스트레스 받는 장소 순위 불러오기</span></h1><hr>
+            <hr>
+
+            <div class="wrapper">
+                {% for datainfo in datainfos2 %}
+                <div>
+                   <div class="left50" >
+                       <br><br>
+                        <p > {{ datainfo.local }} 에서의 평균 스트레스 지수  </p>
+                        <br>
+                        <div style="clear:both;"></div>
+                        <p >데이터 입력 횟수 {{ datainfo.count }}</p>
+                        <div style="clear:both;"></div>
+                        <p >스트레스 검출 횟수 {{ datainfo.stress_count }}</p>
+                   </div>
+                    <div style="clear:both;"></div>
+                    {% endfor %}
+                </div>
             </div>
-            <br>
-            <br>
-            <div>
-              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.count }}</div>
+        </ul>
+    </div>
+    <div style="clear:both;"></div>
+
+
+    <br>
+    <div>
+        <ul>
+            <h1 class="font_white">1 2 <span class="page">3</span> <span class="page">  부정맥 데이터 불러오기</span></h1>
+            <hr>
+
+            <div class="wrapper">
+                {% for datainfo in datainfos3 %}
+                <div>
+                    <p id="ecg" class="left100">
+                        <img style="width:800px;" src="{{ datainfo.image }}">
+                    </p>
+                </div>
+                <div>
+                   <div class="left50" >
+                       <br><br>
+                       <div href="#"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></div>
+                      
+                        <p > {{ datainfo.local }} 에서의 평균 스트레스 지수  </p>
+                        <br>
+                        <div style="clear:both;"></div>
+                        <p >데이터 측정 시간 {{ datainfo.time }}</p>
+                        <div style="clear:both;"></div>
+                        <p >PAC 여부 {{ datainfo.pac }}</p>
+                        <div style="clear:both;"></div>
+                        <p >PVC 여부 {{ datainfo.pvc }}</p>
+                        <div style="clear:both;"></div>
+                        <p >LBBB 여부 {{ datainfo.lbbb }}</p>
+                        <div style="clear:both;"></div>
+                        <p >RBBB 여부 {{ datainfo.rbbb }}</p>
+                   </div>
+                    <div style="clear:both;"></div>
+                    {% endfor %}
+                    <div class="left50" >
+                      {{ macros.pagination_index(pagination3, 'index.index') }}
+                    </div>
+                </div>
             </div>
-            <div>
-              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.arrythmia_value }}</div>
-            </div>
-        </div>
-        {% endfor %}
-    </ul>
+        </ul>
     </div>
     <div style="clear:both;"></div>
     <br><br>
 
-
-    <!--세번째 page-->
-    <div>
-      <ul>
-        <h1 class="font_white">1 2 <span class="page">3</span> <span class="page">  부정맥을 나온 장소</span> </h1> <hr>
-        {% if not datainfos3 %}
-        <h2 class="text-center p-5">부정맥을 나타내는 데이터가 없습니다. </a></h2>
-        {% endif %}
-        {% for datainfo in datainfos3 %}
-        <div>
-            <p id="ecg" class="left_photo"><img src="{{ datainfo.image }}" style="width:800px;"></p><br>
-            <br>
-            <div>
-                <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.local }}</div>
-            </div>
-            <br>
-            <br>
-            <div>
-              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.time }}</div>
-            </div>
-            <div>
-              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.pac }}</div>
-            </div>
-            <div>
-              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.pvc }}</div>
-            </div>
-            <div>
-              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.rbbb }}</div>
-            </div>
-            <div>
-              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.lbbb }}</div>
-            </div>
-        </div>
-        {% endfor %}
-        {{ macros.pagination_index(pagination3, 'index.index') }}
-    </ul>
-    </div>
-    <div style="clear:both;"></div>
-
-
 </body>
 </html>
 {% endblock %}
-
