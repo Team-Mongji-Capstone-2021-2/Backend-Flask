@@ -39,7 +39,7 @@
     <br>
     <div>
         <ul>
-            <h1 class="font_white"><span class="page">1</span> 2 3</h1><hr>
+            <h1 class="font_white"><span class="page">1</span> 2 3  <span class="page">  모든 데이터 불러오기</span></h1><hr>
             {% if not datainfos1 %}
             <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
           {% endif %}
@@ -67,50 +67,80 @@
                 <div>
                   <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.lbbb }}</div>
                 </div>
-               
-                
             </div>
             {% endfor %}
-            {{ macros.pagination_index(pagination1, 'index.index') }}
+            <div>
+              {{ macros.pagination_index(pagination1, 'index.index') }}
+            </div>
         </ul>
     </div>
     <div style="clear:both;"></div>
     <br><br>
 
-
-
     <!--두번째 page-->
     <div>
-        <ul>
-            <h1 class="font_white">1 <span class="page">2</span> 3</h1><hr>
+      <ul>
+        <h1 class="font_white">1 <span class="page">2</span> 3  <span class="page">  스트레스 받는 장소 순위 불러오기</span></h1><hr>
+        {% if not datainfos2 %}
+        <h2 class="text-center p-5">스트레스를 나타내는 데이터가 없습니다. </a></h2>
+        {% endif %}
+        {% for datainfo in datainfos2 %}
+        <div>
+            <br>
             <div>
-                <p id="부정맥" class="left_photo"><img src="ecg1.jpg" style="width:600px;"></p><br>
-
-                <table id ="star_table" align="right" style="width: 40%">
-                    <tr align="left">
-                        <th>pvc</th>
-                        <th>pac</th>
-                        <th>lbbb</th>
-                        <th>rbbb</th>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>★</td>
-                        <td>★</td>
-                    </tr>
-                    <tr>
-                        <td>★</td>
-
-                    </tr>
-
-                    <tr>
-                        <td>★</td>
-                    </tr>
-                </table>
+                <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.local }}</div>
             </div>
+            <br>
+            <br>
+            <div>
+              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.count }}</div>
+            </div>
+            <div>
+              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.arrythmia_value }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+    </div>
+    <div style="clear:both;"></div>
+    <br><br>
 
-        </ul>
+
+    <!--세번째 page-->
+    <div>
+      <ul>
+        <h1 class="font_white">1 2 <span class="page">3</span> <span class="page">  부정맥을 나온 장소</span> </h1> <hr>
+        {% if not datainfos3 %}
+        <h2 class="text-center p-5">부정맥을 나타내는 데이터가 없습니다. </a></h2>
+        {% endif %}
+        {% for datainfo in datainfos3 %}
+        <div>
+            <p id="ecg" class="left_photo"><img src="{{ datainfo.image }}" style="width:800px;"></p><br>
+            <br>
+            <div>
+                <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.local }}</div>
+            </div>
+            <br>
+            <br>
+            <div>
+              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.time }}</div>
+            </div>
+            <div>
+              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.pac }}</div>
+            </div>
+            <div>
+              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.pvc }}</div>
+            </div>
+            <div>
+              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.rbbb }}</div>
+            </div>
+            <div>
+              <div class="right_photo" style="border: 1px solid black; height:20px;padding: 10px;">{{ datainfo.lbbb }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        {{ macros.pagination_index(pagination3, 'index.index') }}
+    </ul>
     </div>
     <div style="clear:both;"></div>
 

@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_user, logout_user
-import hashlib
 from apps.common.auth import SHA256, already_signin
 from apps.controllers.users.forms import SignInForm, SignUpForm
 from apps.database.models import User
