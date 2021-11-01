@@ -12,7 +12,7 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
-
+'''
 @manager.command
 def test():
     """test code"""
@@ -28,7 +28,7 @@ def test():
     else:
         print('fail')
         exit(1)
-
+'''
 
 @manager.option('-h', '--host', dest='host', default=Config.APP_HOST)
 @manager.option('-p', '--port', dest='port', default=Config.APP_PORT)
