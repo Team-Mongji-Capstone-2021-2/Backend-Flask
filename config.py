@@ -38,7 +38,7 @@ class Config:
 
     APP_MODE = JsonConfig.get_data('APP_MODE', APP_MODE_PRODUCTION)
     APP_HOST = JsonConfig.get_data('APP_HOST', '0.0.0.0')
-    APP_PORT = int(JsonConfig.get_data('APP_PORT', 80))
+    APP_PORT = int(JsonConfig.get_data('APP_PORT', 5000))
 
     DB_USER_NAME = JsonConfig.get_data('DB_USER_NAME', 'admin')
     DB_USER_PASSWD = JsonConfig.get_data('DB_USER_PASSWD', 'capstone1234')
