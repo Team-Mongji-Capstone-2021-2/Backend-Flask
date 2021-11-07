@@ -20,16 +20,13 @@ def index():
     page = int(args.get('page') or 1)
     per_page = 1
 
-    pagination1 = Datainfo.query.filter(Datainfo.user_id == current_user.id).order_by(Datainfo.id.desc()).paginate(page, per_page)
+    pagination1 = Datainfo.query.filter(Datainfo.user_id == current_user.id).order_by(Datainfo.id.desc()).paginate(page, per_page, error_out=False)
     datainfos1 = pagination1.items
 
-    datainfos2 = db.session.query(Datainfo.local, func.count(Datainfo.local).label('count'), func.count(Datainfo.stressData==True).label('stress_count')).group_by(Datainfo.local).filter(Datainfo.user_id==current_user.id).order_by((func.count(Datainfo.stressData==False)/func.count(Datainfo.stressData)).desc()).all();
+    datainfos2 = db.session.query(Datainfo.local, func.count(Datainfo.local).label('count'), func.count(Datainfo.stressData).label('stress_count')).group_by(Datainfo.local).filter(Datainfo.user_id==current_user.id).order_by((func.count(Datainfo.stressData==False)/func.count(Datainfo.stressData)).desc()).limit(3);
     
-    pagination3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).paginate(page, per_page)
-    datainfos3 = pagination3.items
-
-    return render_template('home.html', datainfos1=datainfos1, datainfos2 = datainfos2, pagination1=pagination1, datainfos3=datainfos3, pagination3=pagination3)
-
+    datainfos3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).limit(3);
+    return render_template('home.html', datainfos1=datainfos1, pagination1=pagination1, datainfos2=datainfos2, datainfos3=datainfos3)
 
 @app.route('/create', methods=['GET','POST'])
 @signin_required
