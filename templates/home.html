@@ -125,13 +125,13 @@
 
                 <div class="left50" >
                     <br><br>
-                    <div href="#"><a href="{{ url_for('index.create') }}"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></a></div>
+                    <div href="#"><a href="{{ url_for('index.create') }}"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></a><a>  데이터 추가</a></div>
                     <div style="clear:both;"></div>
-                    <hr align="left" color="black" style="width: 60%;" noshade>
+                    <hr align="left" color="black" style="width: 70%;" noshade>
                     <br><br>
 
-                    <table class="type04" style="width: 60%" >
-                        <tr><td>{{loop.index}}</td></tr>
+                    <table class="type04" style="width: 70%" >
+                        <tr><th>시간: {{ datainfo.time }}, 장소: {{ datainfo.local }}</th></tr>
                         <tr align="left">
                             <th>데이터 측정 시간</th>
                             <td>{{ datainfo.time }}</td>
@@ -150,7 +150,7 @@
                         </tr>
                     </table>
                     {% endfor %}
-                    <div class="left200" >
+                    <div class="left200">
                     {{ macros.pagination_index(pagination1, 'index.index') }}
                     </div>
                 </div>
@@ -174,7 +174,7 @@
                             <tr align="left">
                                 <th>번호</th>
                                 <th>장소</th>
-                                <th>데이터 입력 횟수</th>
+                                <th>각 장소에서의 데이터 입력 횟수</th>
                                 <th>스트레스 검출 횟수</th>
                             </tr>
                         </thead>
@@ -199,11 +199,10 @@
      <br>
      <div>
          <ul>
-             <h1 class="font_white">1 2 <span class="page">3</span> <span class="page"> 부정맥 데이터 불러오기</span></h1>
+             <h1 class="font_white">1 2 <span class="page">3</span> <span class="page"> 부정맥 데이터만 불러오기</span></h1>
              <hr>
- 
+             {% for datainfo in datainfos3 %}
              <div class="wrapper">
-                 {% for datainfo in datainfos3 %}
                  <div>
                      <p id="arrhythmia" class="left100">
                          <img style="width:800px;" src="{{ datainfo.image }}">
@@ -217,31 +216,30 @@
                      <hr align="left" color="black" style="width: 60%;" noshade>
                      <br><br>
  
-                     <table class="type04" style="width: 60%" >
-                         <tr align="left">
-                             <th>데이터 측정 시간</th>
-                             <td>{{ datainfo.time }}</td>
-                         </tr>
-                         <tr align="left">
-                             <th><U>{{ datainfo.local }}</U> 에서의 평균 스트레스 지수 </th>
-                             <td>20</td>
-                         </tr>
- 
-                         <tr>
-                             <th>PAC 여부</th>
-                             <td>{{ datainfo.pac }}</td>
-                         </tr>
-                         <tr>
-                             <th>PVC 여부</th>
-                             <td>{{ datainfo.pvc }}</td>
-                         </tr>
-                     </table>
+                     <table class="type04" style="width: 70%" >
+                        <tr><th>시간: {{ datainfo.time }}, 장소: {{ datainfo.local }}</th></tr>
+                        <tr align="left">
+                            <th>데이터 측정 시간</th>
+                            <td>{{ datainfo.time }}</td>
+                        </tr>
+                        <tr align="left">
+                            <th><U>{{ datainfo.local }}</U> 에서의 스트레스 여부 </th>
+                            <td>{{ datainfo.stressData }}</td>
+                        </tr>
+                        <tr>
+                            <th>PAC 여부</th>
+                            <td>{{ datainfo.pac }}</td>
+                        </tr>
+                        <tr>
+                            <th>PVC 여부</th>
+                            <td>{{ datainfo.pvc }}</td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>
                      {% endfor %}
-                     
                      <div style="clear:both;"></div>
-                     <div class="left50" >
-                     </div>
-                 </div>
+                     <div class="left50" > 
              </div>
          </ul>
      </div>

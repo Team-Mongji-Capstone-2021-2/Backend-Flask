@@ -23,9 +23,9 @@ def index():
     pagination1 = Datainfo.query.filter(Datainfo.user_id == current_user.id).order_by(Datainfo.id.desc()).paginate(page, per_page, error_out=False)
     datainfos1 = pagination1.items
 
-    datainfos2 = db.session.query(Datainfo.local, func.count(Datainfo.local).label('count'), func.count(Datainfo.stressData).label('stress_count')).group_by(Datainfo.local).filter(Datainfo.user_id==current_user.id).order_by((func.count(Datainfo.stressData==False)/func.count(Datainfo.stressData)).desc()).limit(3);
-    
-    datainfos3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).limit(3);
+    datainfos2 = db.session.execute('select local as local, count(*) as count, count(case when stressData = 1 then 1 end) as stress_count from datainfos group by local limit 5')
+
+    datainfos3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).limit(3)
     return render_template('home.html', datainfos1=datainfos1, pagination1=pagination1, datainfos2=datainfos2, datainfos3=datainfos3)
 
 @app.route('/create', methods=['GET','POST'])
@@ -46,3 +46,4 @@ def create():
         
         return redirect(url_for('index.index'))
     return render_template('create.html', form=form)
+
