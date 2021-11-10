@@ -185,10 +185,10 @@
                             <td>{{ datainfo.local }} </td>
                             <td>{{ datainfo.count }}</td>
                             <td>{{ datainfo.stress_count }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
                 </div>
             </div>
         </ul>
@@ -201,53 +201,35 @@
          <ul>
              <h1 class="font_white">1 2 <span class="page">3</span> <span class="page"> 부정맥 데이터만 불러오기</span></h1>
              <hr>
-             {% for datainfo in datainfos3 %}
              <div class="wrapper">
-                 <div>
-                     <p id="arrhythmia" class="left100">
-                         <img style="width:800px;" src="{{ datainfo.image }}">
-                     </p>
+                <table>
+                    {% for datainfo in datainfos3 %}
+                        <tr>
+                          <td class="related-post-img">
+                            <div>
+                                <p id="ecg" class="left100">
+                                    <img style="width:800px;" src="{{ datainfo.image }}">
+                                </p>
+                            </div>
+                          </td>
+                          <td class="related-post-title">
+                            <div>
+                              <td>{{ datainfo.local }}</td>
+                            </div>
+                            <span>{{ datainfo.arrhythmia }}</span>
+                          </td>
+                        </tr>
+                    {% endfor %}
+                  </table>
+                     <div style="clear:both;"></div>
+                     <div class="left50" >
                  </div>
- 
-                 <div class="left50" >
-                     <br><br>
-                     <div href="#"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></div>
-                     <div style="clear:both;"></div>
-                     <hr align="left" color="black" style="width: 60%;" noshade>
-                     <br><br>
- 
-                     <table class="type04" style="width: 70%" >
-                        <tr><th>시간: {{ datainfo.time }}, 장소: {{ datainfo.local }}</th></tr>
-                        <tr align="left">
-                            <th>데이터 측정 시간</th>
-                            <td>{{ datainfo.time }}</td>
-                        </tr>
-                        <tr align="left">
-                            <th><U>{{ datainfo.local }}</U> 에서의 스트레스 여부 </th>
-                            <td>{{ datainfo.stressData }}</td>
-                        </tr>
-                        <tr>
-                            <th>PAC 여부</th>
-                            <td>{{ datainfo.pac }}</td>
-                        </tr>
-                        <tr>
-                            <th>PVC 여부</th>
-                            <td>{{ datainfo.pvc }}</td>
-                        </tr>
-                    </table>
-                    </div>
-                </div>
-                     {% endfor %}
-                     <div style="clear:both;"></div>
-                     <div class="left50" > 
              </div>
          </ul>
      </div>
      <div style="clear:both;"></div>
      <br><br>
  
-
-
 </body>
 </html>
 {% endblock %}
