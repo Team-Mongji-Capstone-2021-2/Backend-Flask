@@ -2,114 +2,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    
     <meta charset="UTF-8">
-
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap/bootstrap.min.js"></script>
 
     <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
+    
     <style>
-
-        .wrapper {
-            display: flex;
-        }
-
-        .wrapper > div {
-            flex: 1;
-        }
-
-        .left50{float:left; margin-left:100px;}
-        .left100{float:left; margin-left:100px;}
-        .right100{float:right; margin-right:100px}
-
-        table.type04 {
-          border-collapse: separate;
-          border-spacing: 1px;
-          text-align: left;
-          line-height: 1.5;
-          border-top: 1px solid #ccc;
-        }
-        table.type04 th {
-          width: 1000px;
-          padding: 10px;
-          font-weight: bold;
-          vertical-align: top;
-          border-bottom: 1px solid #ccc;
-        }
-        table.type04 td {
-          width: 350px;
-          padding: 10px;
-          vertical-align: top;
-          border-bottom: 1px solid #ccc;
-        }
-
-        table.type10 {
-          border-collapse: collapse;
-          text-align: left;
-          line-height: 1.5;
-          border-top: 1px solid #ccc;
-          border-bottom: 1px solid #ccc;
-        }
-        table.type09 {
-          border-collapse: collapse;
-          text-align: left;
-          line-height: 1.5;
-
-        }
-        table.type09 thead th {
-          padding: 10px;
-          font-weight: bold;
-          vertical-align: top;
-          color: #369;
-          border-bottom: 3px solid #036;
-        }
-        table.type09 tbody th {
-          width: 150px;
-          padding: 10px;
-          font-weight: bold;
-          vertical-align: top;
-          border-bottom: 1px solid #ccc;
-          background: #f3f6f7;
-        }
-        table.type09 td {
-          width: 350px;
-          padding: 10px;
-          vertical-align: top;
-          border-bottom: 1px solid #ccc;
-        }
-
-
-        .font_white{font-family:verdana; font-weight:bold; color:white;}
-        .page{font-size:40px; color: black;}
-
-    </style>
-</head>
-
-<body style="background-color:#FDF0A4;">
+        *{
+             margin: 0px;
+             padding: 0px;
+         }
+ 
+         .main_box {
+             height: 45px;
+             margin: 0 auto;
+             text-align: center;
+             background-color:#3c3c3c
+         }
+         .common {
+             display: inline-table;
+             font-size: 15px;
+             position: relative;
+             top: 10px;
+             color:white;
+         }
+         .content {
+             display: table-cell;
+             text-align: center;
+             vertical-align: middle;
+         }
+         .menu {
+             float: left;
+             margin-left:200px;
+         }
+         .login {
+             float: right;
+             margin-right:200px;
+             top: 12px;
+             font-size: 12px;
+         }
+         .wrapper {
+             display: flex;
+         }
+ 
+         .wrapper > div {
+             flex: 1;
+         }
+ 
+         .left50{float:left; margin-left:100px;}
+         .left30{float:left; margin-left:30px;}
+         .left100{float:left; margin-left:100px;}
+         .right100{float:right; margin-right:100px}
+         #googl{font-family: 'Bebas Neue', cursive;}
+ 
+         table.type04 {
+           border-collapse: separate;
+           border-spacing: 1px;
+           text-align: left;
+           line-height: 1.5;
+           border-top: 1px solid #ccc;
+         }
+         table.type04 th {
+           width: 1000px;
+           padding: 10px;
+           font-weight: bold;
+           vertical-align: top;
+           border-bottom: 1px solid #ccc;
+         }
+         table.type04 td {
+           width: 350px;
+           padding: 10px;
+           vertical-align: top;
+           border-bottom: 1px solid #ccc;
+         }
+ 
+         table.type10 {
+           border-collapse: collapse;
+           text-align: left;
+           line-height: 1.5;
+           border-top: 1px solid #ccc;
+           border-bottom: 1px solid #ccc;
+         }
+         table.type09 {
+           border-collapse: collapse;
+           text-align: left;
+           line-height: 1.5;
+ 
+         }
+         table.type09 thead th {
+           padding: 10px;
+           font-weight: bold;
+           vertical-align: top;
+           color: #369;
+           border-bottom: 3px solid #036;
+         }
+         table.type09 tbody th {
+           width: 150px;
+           padding: 10px;
+           font-weight: bold;
+           vertical-align: top;
+           border-bottom: 1px solid #ccc;
+           background: #f3f6f7;
+         }
+         table.type09 td {
+           width: 350px;
+           padding: 10px;
+           vertical-align: top;
+           border-bottom: 1px solid #ccc;
+         }
+ 
+ 
+         .font_white{font-family:verdana; font-weight:bold; color:white;}
+         .page{font-size:40px; color: black;}
+ 
+     </style>
+ </head>
+<body style="background-color:white;">
 
     {% block body %}
     {% import 'layout/pagination.html' as macros %}
     
     <!--헤더-->
-    <div >
-        <img style="margin-right:100px; float:right" href="{{ url_for('user.signout') }}" src="https://img.icons8.com/material-outlined/24/000000/person-male.png"/>
-        <div style="margin-right:20px; float:right"><span href="#"><U>{{ current_user.name }}</U></span>님</div>
+    <div class="main_box">
+        <div class="menu common" href="#"><p  class="content">ECG ARRHYTHMIA</p></div>
+        <div class="login common"><p class="content">
+            <div ><span><U>{{current_user.name}}</U></span>님</div>
+        </p></div>
+        <div class="btn-group" role="toolbar" aria-label="Toolbar with button groups" style="height:35px; float:right; margin:5px;">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <form action="/user/signout" method = "GET">
+                    <button type="submit" class="btn btn-secondary btn-sm" >로그아웃</button>
+                </form>
+                <form action="/index/create" method = "GET">
+                    <button type="submit" class="btn btn-secondary btn-sm">데이터 추가</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div style="clear:both;"></div>
-
+    <br><br>
 
     <div style="text-align: center" href="#" >
         <img src="https://img.icons8.com/material-outlined/48/000000/heart-with-pulse.png"/>
     </div>
-
     <h2 style="font-family:verdana; text-align:center;" href="#">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h2>
 
     <!--첫번째 page-->
-    <br>
+    <br><br><br><br><br><br>
     <div>
         <ul>
-            <h1 class="font_white"><span class="page">1</span> 2 3 <span class="page">  모든 데이터 불러오기</span></h1>
+            <h1 class="font_white"><span class="page"> 1</span> 2 3 <span class="page">  모든 데이터 불러오기</span></h1>
             <hr>
 
             <div class="wrapper">
@@ -128,29 +176,38 @@
                     <div href="#"><a href="{{ url_for('index.create') }}"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></a><a>  데이터 추가</a></div>
                     <div style="clear:both;"></div>
                     <hr align="left" color="black" style="width: 70%;" noshade>
-                    <br><br>
-
+                    <br>
                     <table class="type04" style="width: 70%" >
-                        <tr><th>시간: {{ datainfo.time }}, 장소: {{ datainfo.local }}</th></tr>
+                        <tr><h4>측정 시각 : {{ datainfo.time }}</h4></tr><br>
+                        <tr><h3><strong>{{ datainfo.local }}</strong> 에서 측정한 ECG 데이터 결과 </h3></tr><br>
                         <tr align="left">
-                            <th>데이터 측정 시간</th>
-                            <td>{{ datainfo.time }}</td>
-                        </tr>
-                        <tr align="left">
-                            <th><U>{{ datainfo.local }}</U> 에서의 스트레스 여부 </th>
-                            <td>{{ datainfo.stressData }}</td>
+                            <th width="15%">스트레스</th>
+                            {% if datainfo.stressData %}
+                                <th width="85%">스트레스 지수가 높지 않습니다.</th>
+                            {% else %}
+                                <th width="85%">스트레스 지수가 높습니다.</th>
+                            {% endif %}
                         </tr>
                         <tr>
-                            <th>PAC 여부</th>
-                            <td>{{ datainfo.pac }}</td>
+                            <th width="15%">PAC</th>
+                            {% if datainfo.pac %}
+                                <th width="85%">pac가 검출되지 않았습니다.</th>
+                            {% else %}
+                                <th width="85%">pac가 검출되었습니다.</th>
+                            {% endif %}
                         </tr>
                         <tr>
-                            <th>PVC 여부</th>
-                            <td>{{ datainfo.pvc }}</td>
+                            <th width="15%">PVC</th>
+                            {% if datainfo.pvc %}
+                                <th width="85%">pvc가 검출되지 않았습니다.</th>
+                            {% else %}
+                                <th width="85%">pvc가 검출되었습니다.</th>
+                            {% endif %}
                         </tr>
                     </table>
                     {% endfor %}
-                    <div class="left200">
+                    <br><br>
+                    <div class="left1000">
                     {{ macros.pagination_index(pagination1, 'index.index') }}
                     </div>
                 </div>
@@ -158,23 +215,23 @@
         </ul>
     </div>
     <div style="clear:both;"></div>
-    <br><br>
+    <br><br><br><br><br>
 
 
       <!--두번째 page-->
     <div>
         <ul>
-            <h1 class="font_white">1 <span class="page">2</span> 3 <span class="page">  스트레스 받는 장소 순위 불러오기</span></h1>
+            <h1 class="font_white"> 1 <span class="page">2</span> 3 <span class="page">  스트레스 받는 장소 순위 불러오기</span></h1>
             <hr>
             <br><br>
                 <div class="container">
                     <div class="row">
-                        <table class="type09" style="width: 60%" >
+                        <table class="type09" style="width:60%; float:left; margin:5px;" >
                         <thead>
                             <tr align="left">
-                                <th>번호</th>
+                                <th>순위</th>
                                 <th>장소</th>
-                                <th>각 장소에서의 데이터 입력 횟수</th>
+                                <th>데이터 입력 횟수</th>
                                 <th>스트레스 검출 횟수</th>
                             </tr>
                         </thead>
@@ -194,35 +251,25 @@
         </ul>
     </div>
     <div style="clear:both;"></div>
+    <br><br><br><br><br>
 
      <!--세번째 page-->
      <br>
      <div>
          <ul>
-             <h1 class="font_white">1 2 <span class="page">3</span> <span class="page"> 부정맥 데이터만 불러오기</span></h1>
-             <hr>
-             <div class="wrapper">
-                <table>
-                    {% for datainfo in datainfos3 %}
-                        <tr>
-                          <td class="related-post-img">
-                            <div>
-                                <p id="ecg" class="left100">
-                                    <img style="width:800px;" src="{{ datainfo.image }}">
-                                </p>
-                            </div>
-                          </td>
-                          <td class="related-post-title">
-                            <div>
-                              <td>{{ datainfo.local }}</td>
-                            </div>
-                            <span>{{ datainfo.arrhythmia }}</span>
-                          </td>
-                        </tr>
-                    {% endfor %}
-                  </table>
-                     <div style="clear:both;"></div>
-                     <div class="left50" >
+             <h1 class="font_white"> 1 2 <span class="page">3</span> <span class="page"> 부정맥 데이터만 불러오기</span></h1>
+             <hr><br>
+                {% for datainfo in datainfos3 %}
+                <div class="media">
+                    <img src="{{ datainfo.image }}" class="mr-3" alt="..." style="width:300px; float:left; margin:30px;" >
+                    <div class="media-body">
+                    <br><br><br>
+                      <h5 class="mt-0"><strong>{{ datainfo.time }}</strong>, <strong>{{ datainfo.local }}</strong>에서 부정맥이 검출됨</h5>
+                      <h6>pac: {{datainfo.pac}}, pvc: {{datainfo.pvc}}, stress: {{datainfo.stressData}}</h6>
+                    </div>
+                </div>
+                <div style="clear:both;"></div><br><hr>
+                {% endfor %}
                  </div>
              </div>
          </ul>

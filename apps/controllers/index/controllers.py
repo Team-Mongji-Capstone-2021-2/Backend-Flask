@@ -28,11 +28,8 @@ def index():
 
     datainfos2 = db.session.execute('select local as local, count(*) as count, count(case when stressData = 1 then 1 end) as stress_count from datainfos where datainfos.user_id = :id group by local limit 5', {'id': current_user.id})
 
-    print("*********************************************")
-    datainfos3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).first()
-    print("=======================================================")
-    print("datainfos3 : ", datainfos3)
-    print("=======================================================")
+    #pagination3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).first()
+    datainfos3 = db.session.execute('select * from datainfos where datainfos.user_id = :id and datainfos.arrhythmia = 1 order by id desc', {'id': current_user.id});
     return render_template('home.html', datainfos1=datainfos1, pagination1=pagination1, datainfos2=datainfos2, datainfos3=datainfos3)
 
 @app.route('/create', methods=['GET','POST'])
