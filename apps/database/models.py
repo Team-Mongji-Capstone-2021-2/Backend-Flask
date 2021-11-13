@@ -41,8 +41,6 @@ class DatainfoMixin: #데이터 모델을 나타내는 객체 선언
     image = db.Column(db.String(256))
     pac = db.Column(db.Boolean, default = False)
     pvc = db.Column(db.Boolean, default = False)
-    rbbb = db.Column(db.Boolean, default = False)
-    lbbb = db.Column(db.Boolean, default = False)
 
 class TestDatainfoModel(DatainfoMixin, db.Model):
     __tablename__ = 'test_datainfos'

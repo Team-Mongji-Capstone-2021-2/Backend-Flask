@@ -1,8 +1,12 @@
-from flask import Blueprint, render_template, redirect, url_for
+import re
+from flask import Blueprint, render_template, redirect, url_for, abort, request
 from flask_login import login_user, logout_user
 from apps.common.auth import SHA256, already_signin
-from apps.controllers.users.forms import SignInForm, SignUpForm
-from apps.database.models import User
+from apps.controllers.users.forms import SignInForm, SignUpForm, UpdateForm
+from apps.common.auth import api_signin_required, signin_required
+from flask_login import current_user
+from apps.common.response import ok, error
+from apps.database.models import Datainfo, User
 from apps.database.session import db
 
 app = Blueprint('user', __name__, url_prefix='/user')
@@ -68,3 +72,53 @@ def signup():
 def signout():
     logout_user()
     return redirect(url_for('user.signin'))
+
+
+@app.route('/modify/<int:user_id>', methods=['GET','POST'])
+@signin_required
+def modify(user_id):
+    user = User.query.filter(User.id == user_id).first()
+    if not user:
+        abort(404)
+    return render_template('update.html', user=user)
+
+
+@app.route('/user/<int:user_id>', methods=['PUT'])
+@api_signin_required
+def modify_user(user_id):
+    form = request.form
+    password = form['password']
+    email = form['email']
+    name = form['name']
+    height = form['height']
+    weight = form['weight']
+    gender = form['gender']
+
+    user = User.query.filter(User.id == user_id).first()
+    if not user:
+        return error(40400)
+    if current_user.id != user.user_id:
+        return error(40300)
+    
+    user.password = password
+    user.email = email
+    user.name = name
+    user.height = height
+    user.weight = weight
+    user.gender = gender
+    db.session.commit()
+    return ok()
+
+@app.route('/user/<int:user_id>', methods=['DELETE'])
+@api_signin_required
+def delete_user(user_id):
+    user = User.query.filter(User.id == user_id).first()
+    if not user:
+        return error(40400)
+    if current_user.id != user_id:
+        return error(40300)
+    
+    Datainfo.query.filter(Datainfo.user_id == user_id).delete()
+    db.session.delete(user)
+    db.session.commit()
+    return ok()
