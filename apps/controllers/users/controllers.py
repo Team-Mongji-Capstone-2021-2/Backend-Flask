@@ -74,13 +74,13 @@ def signout():
     return redirect(url_for('user.signin'))
 
 
-@app.route('/modify/<int:user_id>', methods=['GET','POST'])
+@app.route('/modify', methods=['GET','POST'])
 @signin_required
 def modify(user_id):
-    user = User.query.filter(User.id == user_id).first()
+    user = User.query.filter(User.id == current_user.id).first()
     if not user:
         abort(404)
-    return render_template('update.html', user=user)
+    return render_template('updateUser.html', user=user)
 
 
 @app.route('/user/<int:user_id>', methods=['PUT'])

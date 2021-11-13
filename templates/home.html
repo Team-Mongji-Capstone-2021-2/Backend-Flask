@@ -137,11 +137,14 @@
         </p></div>
         <div class="btn-group" role="toolbar" aria-label="Toolbar with button groups" style="height:35px; float:right; margin:5px;">
             <div class="btn-group mr-2" role="group" aria-label="First group">
-                <form action="/user/signout" method = "GET">
-                    <button type="submit" class="btn btn-secondary btn-sm" >로그아웃</button>
+                <form action="#" method = "GET">
+                    <button type="submit" class="btn btn-secondary btn-sm">회원정보 수정</button>
                 </form>
                 <form action="/index/create" method = "GET">
                     <button type="submit" class="btn btn-secondary btn-sm">데이터 추가</button>
+                </form>
+                <form action="/user/signout" method = "GET">
+                    <button type="submit" class="btn btn-secondary btn-sm" >로그아웃</button>
                 </form>
             </div>
         </div>
@@ -162,24 +165,24 @@
 
             <div class="wrapper">
                 {% if not datainfos1 %}
-                    <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+                    <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                 {% endif %}
                 {% for datainfo in datainfos1 %}
                 <div>
-                    <p id="ecg" class="left100">
+                    <p id="ecg" class="left50">
                         <img style="width:800px;" src="{{ datainfo.image }}">
                     </p>
                 </div>
 
                 <div class="left50" >
-                    <br><br>
-                    <div href="#"><a href="{{ url_for('index.create') }}"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></a><a>  데이터 추가</a></div>
+                    <br><br><br>
+                    <div><a href="{{ url_for('index.create') }}"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></a><a>  데이터 추가</a></div>
                     <div style="clear:both;"></div>
                     <hr align="left" color="black" style="width: 70%;" noshade>
                     <br>
                     <table class="type04" style="width: 70%" >
                         <tr><h4>측정 시각 : {{ datainfo.time }}</h4></tr><br>
-                        <tr><h3><strong>{{ datainfo.local }}</strong> 에서 측정한 ECG 데이터 결과 </h3></tr><br>
+                        <tr><h3><strong>{{ datainfo.local }}</strong> 에서 측정한 ECG 데이터 결과 </h3></tr><br><br>
                         <tr align="left">
                             <th width="15%">스트레스</th>
                             {% if datainfo.stressData %}
@@ -221,13 +224,16 @@
       <!--두번째 page-->
     <div>
         <ul>
-            <h1 class="font_white"> 1 <span class="page">2</span> 3 <span class="page">  스트레스 받는 장소 순위 불러오기</span></h1>
+            <h1 class="font_white"> 1 <span class="page">2</span> 3 <span class="page">  스트레스 받는 장소 순위</span></h1>
             <hr>
             <br><br>
                 <div class="container">
                     <div class="row">
-                        <table class="type09" style="width:60%; float:left; margin:5px;" >
-                        <thead>
+                        {% if not datainfos1 %}
+                            <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+                        {% else %}
+                        <table class="table" style="width:150%; float:right; margin:5px;" >
+                        <thead class="thead-dark">
                             <tr align="left">
                                 <th>순위</th>
                                 <th>장소</th>
@@ -246,6 +252,7 @@
                             {% endfor %}
                         </tbody>
                         </table>
+                        {% endif %}
                 </div>
             </div>
         </ul>
@@ -257,19 +264,35 @@
      <br>
      <div>
          <ul>
-             <h1 class="font_white"> 1 2 <span class="page">3</span> <span class="page"> 부정맥 데이터만 불러오기</span></h1>
+             <h1 class="font_white"> 1 2 <span class="page">3</span> <span class="page"> 부정맥이 검출된 장소</span></h1>
              <hr><br>
+                {% if not datainfos1 %}
+                        <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+                {% else %}
                 {% for datainfo in datainfos3 %}
                 <div class="media">
                     <img src="{{ datainfo.image }}" class="mr-3" alt="..." style="width:300px; float:left; margin:30px;" >
                     <div class="media-body">
                     <br><br><br>
-                      <h5 class="mt-0"><strong>{{ datainfo.time }}</strong>, <strong>{{ datainfo.local }}</strong>에서 부정맥이 검출됨</h5>
-                      <h6>pac: {{datainfo.pac}}, pvc: {{datainfo.pvc}}, stress: {{datainfo.stressData}}</h6>
+                      <h5 class="mt-0"><strong>{{ datainfo.time }}</strong>, <strong>{{ datainfo.local }}</strong>에서 부정맥이 검출됨</h5><br>
+                      <h6><strong>심전도 데이터를 분석한 결과</strong></h6><br>
+                      {% if datainfo.pac %}
+                        <h6>pac가 검출되지 않았습니다.</h6>
+                      {% else %}
+                        <h6>pac가 검출되었습니다.</h6>
+                      {% endif %}
+
+                      {% if datainfo.pvc %}
+                        <h6>pvc가 검출되지 않았습니다.</h6>
+                      {% else %}
+                        <h6>pvc가 검출되었습니다.</h6>
+                      {% endif %}
+                      
                     </div>
                 </div>
                 <div style="clear:both;"></div><br><hr>
                 {% endfor %}
+                {% endif %}
                  </div>
              </div>
          </ul>
