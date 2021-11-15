@@ -8,11 +8,11 @@
   <div class="container">
     <div class="row justify-content-center mt-5">
       <div class="col-lg-4">
-        <div class="card">
+        <div class="card" style="width: 40rem; top:50px; right:100px;">
           <div class="card-body text-center">
             <img src="https://img.icons8.com/material-outlined/48/000000/heart-with-pulse.png" width="70" height="70">
-            <h4 class="mt-2">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h4>
-            <h5 class="mt-2">회원가입</h5>
+            <h4 class="mt-2">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h4><br>
+            <h5 class="mt-2">create a account</h5><br>
 
             <form class = "register__input" action="/user/signup" method="post">
               {{ form.hidden_tag() }}
@@ -59,7 +59,7 @@
                 </div>
               </div>
               <input type="submit" value="signup" class="form-control btn" style="background-color: #ee8978; color: white">
-            </form>
+            </form><br>
             <a class="text-left" href="/user/signin"><p class="small">로그인 화면으로</p></a>
           </div>
         </div>
