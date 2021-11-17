@@ -43,6 +43,7 @@ def create():
     if form.validate_on_submit():
         datafile = form.datafile.data
         datafile.save('./static/tmp_images/' + secure_filename(datafile.filename))
+        #TEMP_FILE_PATH = "/home/ec2-user/app/static";
         data2 = pd.read_csv('./static/tmp_images/' + secure_filename(datafile.filename), encoding = 'utf-8', engine = 'python', index_col = False)
         os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/'+ secure_filename(datafile.filename))
         data2 = data2.drop(['박 헌'], axis = 1)
