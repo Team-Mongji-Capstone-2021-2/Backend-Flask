@@ -13,10 +13,9 @@ import glob
 import csv
 
 from flask_login import current_user
-from apps.database.models import Datainfo, User
+from apps.database.models import Ecg, User
 
 bucket_name = 'capstone-heartbeat-s3'
-
 
 def no(result_c, x):
     sum_c = 0
@@ -40,14 +39,15 @@ def no(result_c, x):
 
 
 def box(x):
+    number=[]
     result = peakutils.indexes(x, thres=0.75, min_dist=300)
     if len(result) < 15:
         result = peakutils.indexes(x, thres=0.45, min_dist=300)
+    for i in range(len(result)):
+        if 0.1>=x[result[i]]:
+            number.append(i)
+    result=np.delete(result, number)
     nono, result = no(result, x)
-    if result[0] -len(x)/4 < 0:  
-        result = result[1:]
-    elif result[-1] + len(x) * 3 / 4 > len(x)-2: 
-        result = result[:-1]    
 
     sub, tot = [], []
     for i in range(len(result)-1):
@@ -64,7 +64,7 @@ def box(x):
     return tot, result
 
 
-def draw(x, peak_num, a, r, second, third, end, name_n, num_id):
+def draw(x, peak_num, a, r, second, third, end, name_n, num_id, dates):
 
     peak_set = find_peak(x, r, second, third, end,a, num_id)
     if peak_set == 0:
@@ -168,12 +168,11 @@ def find_peak(x, r, second, third, end, a, num_id, dates):
     return peak_set
 
 
-
-
 def average(raw, box_size):
     bbox = np.ones(box_size)/box_size
     raw_smooth = np.convolve(bbox, raw, mode='same')
     return raw_smooth
+
 
 def median(raw, box_size):
     raw_smooth = ndimage.median_filter(raw, box_size)
@@ -232,11 +231,12 @@ def onoffset(x, start,end,  p_peak, q_peak, nn, nname, dates):
                     pon_idx = inflexion_point_1-50+inflexion_point_2+start+inf3
         else:
             pvc=True
-
+    if not p_peak:
+        pvc = True
     return pon_idx, poff_idx, pvc
 
 
-def PC(result, x, a, b, p_peak, q_peak, nn, nname, n, plot_num, dates):
+def PC(tmp, result, x, a, b, p_peak, q_peak, nn, nname, n, plot_num, dates):
     r_peak = result
     inter = []
     pc = False
@@ -268,10 +268,38 @@ def PC(result, x, a, b, p_peak, q_peak, nn, nname, n, plot_num, dates):
         pon_idx, poff_idx, pvc = onoffset(x, a, b, p_peak, q_peak, nn, nname, dates)
         pc = False
         pvc = False 
-    
+       
+        
+    r_list=np.array(tmp[result])
+    r_avg=r_list.mean()
+    for j in range(len(r_list)):
+        if abs(r_avg-r_list[j]) >= 0.5:
+            if pc == True:
+                pvc = True
+                
+    if pc == True:  
+        if not p_peak:
+            pvc  = True 
     return pc, pac, pvc, pon_idx, poff_idx, plot_idx
 
-
+def width(all_peak):
+    Q, T = [], []
+    pvc_qrs = []
+    pvc = False
+    for i in range(len(all_peak)):
+        if not all_peak[i][1] or not all_peak[i][3]:
+            continue
+        else:
+            Q.append(all_peak[i][1])
+            T.append(all_peak[i][3])
+    diff = np.subtract(T,Q)
+    qrs_avg = np.average(diff)
+    for i in range(len(diff)):
+        if diff[i] - qrs_avg >= qrs_avg * 0.66:
+            pvc_qrs.append(i)
+    if pvc_qrs:
+        pvc = True
+    return pvc, pvc_qrs
 
 
 def main2(data2, dates, n):
@@ -284,6 +312,7 @@ def main2(data2, dates, n):
     plot_all = []
     pac_plot = []
     pvc_plot = []
+    all_peak = []
     for a, b in total:
         x = []
         x = tmp[a:b]
@@ -296,9 +325,10 @@ def main2(data2, dates, n):
             if peak_num == 0:
                 peak_num = 1
         else:
-            pc, pac, pvc, pon_idx, poff_idx, plot_set = PC(result, x, a, b, peak_set[0], peak_set[1], 0, peak_set[-1], n, plot_num, dates)
+            pc, pac, pvc, pon_idx, poff_idx, plot_set = PC(tmp, result, x, a, b, peak_set[0], peak_set[1], 0, peak_set[-1], n, plot_num, dates)
             peak_set = peak_set + [pon_idx, poff_idx, pc, pac, pvc, plot_set]
             all_peak_all.append(peak_set)
+            all_peak.append(peak_set)
             if peak_num == 0:
                 peak_num = 1
             if plot_set == 'yes':
@@ -306,24 +336,26 @@ def main2(data2, dates, n):
             if pac == True:
                 pac_plot.append([a, b])
             if pvc == True:
-                pvc_plot.append([a, b])
-                plt.plot(x)
+                pvc_plot.append((a, b))
 
         num+=1
         plot_num +=1
-
+        peak_num += 1
+        
+    pvc_sub, pvc_qrs = width(all_peak)
+    if pvc_qrs and (pvc and pvc_sub):
+        if pc == True: 
+            for j in range(len(pvc_qrs)):
+                pvc_plot.append((total[pvc_qrs[j]][0], total[pvc_qrs[j]][1]))
+    
+    plt.plot(tmp, 'k')
     if plot_all:
-        plt.plot(tmp, 'k')
         for j in range(len(plot_all)):
             plt.plot(tmp[plot_all[j][0]:plot_all[j][1]], color = 'r')
-    if pac_plot:
-        plt.plot(tmp, 'k')
-        for j in range(len(pac_plot)):
-            plt.plot(tmp[pac_plot[j][0]:pac_plot[j][1]], color = 'b')
     if pvc_plot:
-        plt.plot(tmp, 'k')
-        for j in range(len(pvc_plot)):
-            plt.plot(tmp[pvc_plot[j][0]:pvc_plot[j][1]], color = 'b')
+        if len(set(pvc_plot)) >=3:
+            for j in range(len(pvc_plot)):
+                plt.plot(tmp[pvc_plot[j][0]:pvc_plot[j][1]], color = 'b')
         
     name_n += 1
     plt.plot(tmp, 'k')
@@ -337,6 +369,7 @@ def main2(data2, dates, n):
     s3.upload_file('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
     os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
     image_url = 'https://capstone-heartbeat-s3.s3.ap-northeast-2.amazonaws.com/graph'+ str(image_number) +'.png'
+    pvc_cnt = 0
     all_peak_all = pd.DataFrame(all_peak_all, columns = ['P', 'Q', 'R', 'S', 'T', 'id', 'ponset', 'poffset', 'pc', 'pac', 'pvc', 'plot_idx'])
     for i in range(len(all_peak_all)):
         if all_peak_all['pc'][i] == True:
@@ -344,7 +377,11 @@ def main2(data2, dates, n):
         if all_peak_all['pac'][i] == True:
             pac = True
         if all_peak_all['pvc'][i] == True:
-            pvc = True
+            pvc_cnt += 1
+    if pvc_cnt >=3:
+        pvc = True
+        pac = False
+            
     return pc, pac, pvc, image_url
 
 

@@ -1,12 +1,13 @@
+from datetime import datetime
 import re
 from flask import Blueprint, render_template, redirect, url_for, abort, request
 from flask_login import login_user, logout_user
 from apps.common.auth import SHA256, already_signin
-from apps.controllers.users.forms import SignInForm, SignUpForm, UpdateForm
+from apps.controllers.user.forms import SignInForm, SignUpForm, EditForm
 from apps.common.auth import api_signin_required, signin_required
 from flask_login import current_user
 from apps.common.response import ok, error
-from apps.database.models import Datainfo, User
+from apps.database.models import Ecg, User
 from apps.database.session import db
 
 app = Blueprint('user', __name__, url_prefix='/user')
@@ -41,13 +42,8 @@ def signup():
 
     if form.validate_on_submit():
         username_user = User.query.filter(User.username == form.username.data).first()
-        password_user = User.query.filter(User.password == form.password.data).first()
-        name_user = User.query.filter(User.name == form.name.data).first()
         email_user = User.query.filter(User.email == form.email.data).first()
-        gender_user = User.query.filter(User.gender == form.gender.data).first()
-        height_user = User.query.filter(User.height == form.height.data).first()
-        weight_user = User.query.filter(User.weight == form.weight.data).first()
-
+        
         if username_user:
             if username_user.username == form.username.data:
                 form.username.errors.append('이미 가입된 아이디입니다.')
@@ -59,13 +55,16 @@ def signup():
         if form.email.errors or form.username.errors:
             return render_template('register.html', form=form)
         user = User(username=form.username.data, password=SHA256.encrypt(form.password.data), name=form.name.data, email=form.email.data,
-            gender=form.gender.data, height=form.height.data, weight=form.weight.data)
+            gender=form.gender.data, height=form.height.data, weight=form.weight.data, created_date= datetime.now)
+
         db.session.add(user)
         db.session.commit()
 
         login_user(user)
         return redirect(url_for('index.index'))
+
     return render_template('register.html', form=form)
+
 
 
 @app.route('/signout', methods=['GET'])
@@ -74,42 +73,37 @@ def signout():
     return redirect(url_for('user.signin'))
 
 
-@app.route('/modify', methods=['GET','POST'])
+
+@app.route('/edit/<idx>', methods=['GET', 'POST'])
 @signin_required
-def modify(user_id):
-    user = User.query.filter(User.id == current_user.id).first()
+def edit(idx):
+    form = EditForm()
+
+    user = User.query.filter(User.id == idx).first()
     if not user:
         abort(404)
-    return render_template('updateUser.html', user=user)
-
-
-@app.route('/user/<int:user_id>', methods=['PUT'])
-@api_signin_required
-def modify_user(user_id):
-    form = request.form
-    password = form['password']
-    email = form['email']
-    name = form['name']
-    height = form['height']
-    weight = form['weight']
-    gender = form['gender']
-
-    user = User.query.filter(User.id == user_id).first()
-    if not user:
-        return error(40400)
-    if current_user.id != user.user_id:
+    if current_user.id != user.id:
         return error(40300)
-    
-    user.password = password
-    user.email = email
-    user.name = name
-    user.height = height
-    user.weight = weight
-    user.gender = gender
-    db.session.commit()
-    return ok()
 
-@app.route('/user/<int:user_id>', methods=['DELETE'])
+    if request.method == "GET":
+        return render_template('updateUser.html', form = form, user = user)
+
+    elif request.method == "POST":
+        if form.validate_on_submit():
+            user.password = SHA256.encrypt(form.password.data)
+            user.email = form.email.data
+            user.name = form.name.data
+            user.gender = form.gender.data
+            user.height = form.height.data
+            user.weight = form.weight.data
+            user.modified_date = datetime.now
+            db.session.commit()
+        return render_template('updateUser.html', form = form, user = user)
+
+    
+
+
+@app.route('/<int:user_id>', methods=['DELETE'])
 @api_signin_required
 def delete_user(user_id):
     user = User.query.filter(User.id == user_id).first()
@@ -118,7 +112,7 @@ def delete_user(user_id):
     if current_user.id != user_id:
         return error(40300)
     
-    Datainfo.query.filter(Datainfo.user_id == user_id).delete()
+    Ecg.query.filter(Ecg.user_id == user_id).delete()
     db.session.delete(user)
     db.session.commit()
     return ok()

@@ -1,0 +1,63 @@
+{% extends 'layout/base.html' %}
+
+{% block head %}
+  <title>updateUser</title>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-lg-4">
+        <div class="card" style="width: 40rem; top:50px; right:100px;">
+          <div class="card-body text-center">
+            <img src="https://img.icons8.com/material-outlined/48/000000/heart-with-pulse.png" width="70" height="70">
+            <h4 class="mt-2">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h4><br>
+            <h5 class="mt-2">update a account</h5><br>
+
+            <form class = "edit__input" action="/user/edit/{{current_user.id}}" method="POST">
+              {{ form.hidden_tag() }}
+              <div class="form-group">
+                {{ form.password(class='form-control mt-4', placeholder = 'password' ) }}
+                <div class="invalid-feedback d-block text-left">
+                  {{ form.password.errors[0] }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form.name(class='form-control mt-3', value = user.name) }}
+                <div class="invalid-feedback d-block text-left">
+                  {{ form.name.errors[0] }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form.email(class='form-control mt-3', value= user.email) }}
+                <div class="invalid-feedback d-block text-left">
+                  {{ form.email.errors[0] }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form.gender(class='form-control mt-3', value=user.gender) }}
+                <div class="invalid-feedback d-block text-left">
+                  {{ form.gender.errors[0] }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form.weight(class='form-control mt-3', value= user.weight) }}
+                <div class="invalid-feedback d-block text-left">
+                  {{ form.weight.errors[0] }}
+                </div>
+              </div>
+              <div class="form-group">
+                {{ form.height(class='form-control mt-3', value=user.height) }}
+                <div class="invalid-feedback d-block text-left">
+                  {{ form.height.errors[0] }}
+                </div>
+              </div>
+              <input type="submit" value="edit" class="form-control btn" style="background-color: #ee8978; color: white">
+            </form><br>
+            <a class="text-left" href="/index"><p class="small">홈 화면으로</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
