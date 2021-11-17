@@ -163,7 +163,7 @@
 
      .carousel-inner{
         width:auto;
-        height:600px;
+        height:auto;
         }
       .carousel-item{
         width: 100%;
@@ -198,6 +198,7 @@
                       <li><a href="#">회원정보수정</a></li>
                       <li><a href="/user/signout" method = "GET">로그아웃</a></li>
                       <li><a href="/index/create" method = "GET">데이터 추가</a></li>
+                      <li><a href="{{url_for('user.edit', idx=current_user.id)}}" method = "GET">회원정보 수정</a></li>
                   </ul>
               </li>
           </ul>
@@ -215,8 +216,12 @@
               <form action="/index/create" method = "GET">
                   <button type="submit" class="btn btn-secondary btn-sm">데이터 추가</button>
               </form>
+              <form action="/user/edit/{{current_user.id}}" method="GET">
+                <button type="submit" class="btn btn-secondary btn-sm">회원정보 수정</button>
+            </form>
           </div>
       </div>
+
     </div>
 
     <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
@@ -229,22 +234,22 @@
           <div class="carousel-item active">
             <img src="static/images/설명.PNG" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
-              <h5>프로젝트 소개1</h5>
-              <p>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
+              <h5 style="color: black; font-weight:bold;">프로젝트 소개1</h5>
+              <p style="color: black; font-weight:bold;">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
             </div>
           </div>
           <div class="carousel-item">
-            <img src="static/images/1.jpg" class="d-block w-100" alt="...">
+            <img src="static/images/team.PNG" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
-              <h5>프로젝트 소개2</h5>
-              <p>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
+              <h5 style="color: black; font-weight:bold;">프로젝트 소개2</h5>
+              <p style="color: black; font-weight:bold;">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
             </div>
           </div>
           <div class="carousel-item">
-            <img src="static/images/1.jpg" class="d-block w-100" alt="...">
+            <img src="static/images/team.PNG" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
-              <h5>팀원 소개</h5>
-              <p>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
+              <h5 style="color: black; font-weight:bold;">팀원 소개</h5>
+              <p style="color: black; font-weight:bold;">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
             </div>
           </div>
         </div>
@@ -266,14 +271,14 @@
             <hr>
 
             <div class="wrapper">
-                {% if not datainfos1 %}
+                {% if not ecgs1 %}
                     <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                 {% endif %}
-                {% for datainfo in datainfos1 %}
+                {% for ecg in ecgs1 %}
                 <div>
                   <br><br>
                     <p id="ecg" class="left100">
-                        <img style="width:800px; " src="{{ datainfo.image }}">
+                        <img style="width:800px; " src="{{ ecg.image }}">
                     </p>
                 </div>
 
@@ -281,18 +286,18 @@
                     <br><br><br>
                     <div class="wrapper">
                       <div><a href="{{ url_for('index.create') }}"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></a><a>  데이터 추가</a></div>
-                      <div href="#"><img src="https://img.icons8.com/ios-glyphs/30/000000/delete-database.png"/></div>
+                      <div><a href="#"><img src="https://img.icons8.com/ios-glyphs/30/000000/delete-database.png"/></a><a>  데이터 삭제</a></div>
                     </div>
                     
                     <div style="clear:both;"></div>
                     <hr align="left" color="black" style="width: 70%;" noshade>
                     <br>
                     <table class="type04" style="width: 70%" >
-                        <tr><h4>측정 시각 : {{ datainfo.time }}</h4></tr><br>
-                        <tr><h3><strong>{{ datainfo.local }}</strong> 에서 측정한 ECG 데이터 결과 </h3></tr><br><br>
+                        <tr><h4>측정 시각 : {{ ecg.measured_date }}</h4></tr><br>
+                        <tr><h3><strong>{{ ecg.local }}</strong> 에서 측정한 ECG 데이터 결과 </h3></tr><br><br>
                         <tr align="left">
                             <th width="15%">스트레스</th>
-                            {% if datainfo.stressData %}
+                            {% if ecg.stress == 0 %}
                                 <th width="85%">스트레스 지수가 높지 않습니다.</th>
                             {% else %}
                                 <th width="85%">스트레스 지수가 높습니다.</th>
@@ -300,7 +305,7 @@
                         </tr>
                         <tr>
                             <th width="15%">PAC</th>
-                            {% if datainfo.pac %}
+                            {% if ecg.pac == 0 %}
                                 <th width="85%">pac가 검출되지 않았습니다.</th>
                             {% else %}
                                 <th width="85%">pac가 검출되었습니다.</th>
@@ -308,7 +313,7 @@
                         </tr>
                         <tr>
                             <th width="15%">PVC</th>
-                            {% if datainfo.pvc %}
+                            {% if ecg.pvc == 0 %}
                                 <th width="85%">pvc가 검출되지 않았습니다.</th>
                             {% else %}
                                 <th width="85%">pvc가 검출되었습니다.</th>
@@ -318,7 +323,7 @@
                     {% endfor %}
 
                     <br><br>
-                    <div class="left100">
+                    <div class="left30">
                     {{ macros.pagination_index(pagination1, 'index.index') }}
                     </div>
                 </div>
@@ -338,7 +343,7 @@
             
                 <div class="container">
                     <div class="row">
-                        {% if not datainfos1 %}
+                        {% if not ecgs1 %}
                             <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
                         <table class="table" style="width:150%; float:left; margin:5px;" >
@@ -351,12 +356,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                           {% for datainfo in datainfos2 %}
+                           {% for ecg in ecgs2 %}
                            <tr  align="left">
                             <td>{{loop.index}}</td>
-                            <td>{{ datainfo.local }} </td>
-                            <td>{{ datainfo.count }}</td>
-                            <td>{{ datainfo.stress_count }}</td>
+                            <td>{{ ecg.local }} </td>
+                            <td>{{ ecg.count }}</td>
+                            <td>{{ ecg.stress_count }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -375,23 +380,23 @@
          <ul>
           <h1 class="font_white"> 1 2 <span class="page">3</span> <span class="page_font"> 부정맥 데이터만 불러오기</span></h1>
              <hr><br>
-                {% if not datainfos1 %}
+                {% if not ecgs1 %}
                         <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                 {% else %}
-                {% for datainfo in datainfos3 %}
+                {% for ecg in ecgs3 %}
                 <div class="media">
-                    <img src="{{ datainfo.image }}" class="mr-3" alt="..." style="width:300px; float:left; margin:30px;" >
+                    <img src="{{ ecg.image }}" class="mr-3" alt="..." style="width:300px; float:left; margin:30px;" >
                     <div class="media-body">
                     <br><br><br>
-                      <h5 class="mt-0"><strong>{{ datainfo.time }}</strong>, <strong>{{ datainfo.local }}</strong>에서 부정맥이 검출됨</h5><br>
+                      <h5 class="mt-0"><strong>{{ ecg.measured_date }}</strong>, <strong>{{ ecg.local }}</strong>에서 부정맥이 검출됨</h5><br>
                       <h6><strong>심전도 데이터를 분석한 결과</strong></h6><br>
-                      {% if datainfo.pac %}
+                      {% if ecg.pac %}
                         <h6>pac가 검출되지 않았습니다.</h6>
                       {% else %}
                         <h6>pac가 검출되었습니다.</h6>
                       {% endif %}
 
-                      {% if datainfo.pvc %}
+                      {% if ecg.pvc %}
                         <h6>pvc가 검출되지 않았습니다.</h6>
                       {% else %}
                         <h6>pvc가 검출되었습니다.</h6>

@@ -26,7 +26,7 @@ class SignUpForm(FlaskForm):
     gender = StringField('gender', validators=[DataRequired(message='필수 값입니다.'),
                                                    Length(max=2, message='2자를 넘을 수 없습니다.')])
 
-class UpdateForm(FlaskForm):
+class EditForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired(message='필수 값입니다.'),
                                                      Length(max=20, message='20자를 넘을 수 없습니다.')])
     email = StringField('email', validators=[DataRequired(message='필수 값입니다.'),
