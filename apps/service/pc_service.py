@@ -381,7 +381,7 @@ def main2(data2, dates, n):
     if pvc_cnt >=3:
         pvc = True
         pac = False
-            
+    plt.close()
     return pc, pac, pvc, image_url
 
 
