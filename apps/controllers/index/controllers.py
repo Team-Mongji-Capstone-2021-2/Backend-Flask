@@ -67,7 +67,7 @@ def create():
 
 @app.route('/<int:ecg_id>', methods=['DELETE'])
 @api_signin_required
-def delete_data(ecg_id):
+def delete(ecg_id):
     ecg = Ecg.query.filter(Ecg.id == ecg_id).first()
     if not ecg:
         return error(40400)
