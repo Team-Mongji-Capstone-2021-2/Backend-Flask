@@ -42,10 +42,11 @@ def create():
 
     if form.validate_on_submit():
         datafile = form.datafile.data
-        datafile.save('./static/tmp_images/' + secure_filename(datafile.filename))
+        #datafile.save('./static/tmp_images/' + secure_filename(datafile.filename))
         #TEMP_FILE_PATH = "/home/ec2-user/app/static";
-        data2 = pd.read_csv('./static/tmp_images/' + secure_filename(datafile.filename), encoding = 'utf-8', engine = 'python', index_col = False)
-        os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/'+ secure_filename(datafile.filename))
+        #data2 = pd.read_csv('./static/tmp_images/' + secure_filename(datafile.filename), encoding = 'utf-8', engine = 'python', index_col = False)
+        #os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/'+ secure_filename(datafile.filename))
+        data2 = pd.read_csv(datafile, encoding = 'utf-8', engine = 'python', index_col = False)
         data2 = data2.drop(['박 헌'], axis = 1)
         data2 = data2[2511:-2500]
         data2 = data2.astype('float')
@@ -67,7 +68,7 @@ def create():
 
 @app.route('/<int:ecg_id>', methods=['DELETE'])
 @api_signin_required
-def delete_data(ecg_id):
+def delete(ecg_id):
     ecg = Ecg.query.filter(Ecg.id == ecg_id).first()
     if not ecg:
         return error(40400)
