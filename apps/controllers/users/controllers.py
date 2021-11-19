@@ -3,7 +3,7 @@ import re
 from flask import Blueprint, render_template, redirect, url_for, abort, request
 from flask_login import login_user, logout_user
 from apps.common.auth import SHA256, already_signin
-from apps.controllers.user.forms import SignInForm, SignUpForm, EditForm
+from apps.controllers.users.forms import SignInForm, SignUpForm, EditForm
 from apps.common.auth import api_signin_required, signin_required
 from flask_login import current_user
 from apps.common.response import ok, error
