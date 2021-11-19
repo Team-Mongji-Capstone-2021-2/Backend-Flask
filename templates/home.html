@@ -273,8 +273,8 @@
 
             <div class="wrapper">
                 {% if not ecgs1 %}
-                    <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
-                {% endif %}
+                    <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}"  style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+                {% else %}
                 {% for ecg in ecgs1 %}
                 <div>
                   <br><br>
@@ -326,6 +326,7 @@
                     <br><br>
                     <div class="left30">
                     {{ macros.pagination_index(pagination1, 'index.index') }}
+                    {% endif %}
                     </div>
                 </div>
             </div>
@@ -345,7 +346,7 @@
                 <div class="container">
                     <div class="row">
                         {% if not ecgs1 %}
-                            <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+                            <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
                         <table class="table" style="width:150%; float:left; margin:5px;" >
                         <thead class="thead-dark">
@@ -382,7 +383,7 @@
           <h1 class="font_white"> 1 2 <span class="page">3</span> <span class="page_font"> 부정맥 데이터만 불러오기</span></h1>
              <hr><br>
                 {% if not ecgs1 %}
-                        <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+                        <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                 {% else %}
                 {% for ecg in ecgs3 %}
                 <div class="media">
