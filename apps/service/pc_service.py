@@ -371,8 +371,8 @@ def main2(data2, dates, n):
     name_n += 1
     image_now = datetime.now()
     image_number = image_now.isoformat()[2:4]+ image_now.isoformat()[5:7] + image_now.isoformat()[8:10] + image_now.isoformat()[11:13] + image_now.isoformat()[14:16] + image_now.isoformat()[17:19]
-    my_path = os.path.abspath('/Users/Pc/vsc/Backend-Flask/static/tmp_images')
-    #my_path = os.path.abspath('/home/ubuntu/Backend-Flask/static/tmp_images')
+    #my_path = os.path.abspath('/Users/Pc/vsc/Backend-Flask/static/tmp_images')
+    my_path = os.path.abspath('/home/ubuntu/Backend-Flask/static/tmp_images')
     my_file = 'graph' + str(image_number)+'.png'
     s3 = boto3.client('s3')
 
@@ -380,8 +380,8 @@ def main2(data2, dates, n):
     #s3.upload_file('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
     #os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
 
-    s3.upload_file('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
-    os.remove('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
+    s3.upload_file('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
+    os.remove('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
 
     image_url_pc = 'https://capstone-heartbeat-s3.s3.ap-northeast-2.amazonaws.com/graph'+ str(image_number) +'.png'
     pvc_cnt = 0
@@ -402,5 +402,6 @@ def main2(data2, dates, n):
 
 def calculatePc(data2, dates):
     pac, pvc, threshold, image_url_pc = main2(data2, dates, 0.7)
+
 
     return pac, pvc, threshold, image_url_pc
