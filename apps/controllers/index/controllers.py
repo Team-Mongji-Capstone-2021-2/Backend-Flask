@@ -42,22 +42,22 @@ def create():
 
     if form.validate_on_submit():
         datafile = form.datafile.data
-        #datafile.save('./static/tmp_images/' + secure_filename(datafile.filename))
-        #TEMP_FILE_PATH = "/home/ec2-user/app/static";
-        #data2 = pd.read_csv('./static/tmp_images/' + secure_filename(datafile.filename), encoding = 'utf-8', engine = 'python', index_col = False)
-        #os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/'+ secure_filename(datafile.filename))
         data2 = pd.read_csv(datafile, encoding = 'utf-8', engine = 'python', index_col = False)
+        dates = data2[1:2]['박 헌'].values
         data2 = data2.drop(['박 헌'], axis = 1)
         data2 = data2[2511:-2500]
         data2 = data2.astype('float')
         data2.columns = [0]
         data2 = data2.reset_index()
         data2 = data2.drop(['index'], axis = 1)
-        dates = ['2021-10-15 11:20:19']
+    
 
-        pc, pac, pvc, image_url = calculatePc(data2, dates)
+        pac, pvc, threshold, image_url_pc = calculatePc(data2, dates)
 
-        ecg = Ecg(local=form.local.data, user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, image = image_url, measured_date=dates[0], created_date = datetime.now)
+        pc = False
+        if(pac == True or pvc == True): pc = True
+        
+        ecg = Ecg(local=form.local.data, user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, rri_avg=threshold[0][1], image_pc = image_url_pc, measured_date=dates[0], created_date = datetime.now)
         db.session.add(ecg)
         db.session.commit()
         

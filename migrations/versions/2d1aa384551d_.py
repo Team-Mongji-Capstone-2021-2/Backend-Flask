@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1c4863594a8a
+Revision ID: 2d1aa384551d
 Revises: 
-Create Date: 2021-11-17 13:47:06.454494
+Create Date: 2021-11-20 22:59:40.468582
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1c4863594a8a'
+revision = '2d1aa384551d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -64,9 +64,11 @@ def upgrade():
     sa.Column('measured_date', sa.String(length=32), nullable=True),
     sa.Column('stress', sa.Boolean(), nullable=True),
     sa.Column('arrhythmia', sa.Boolean(), nullable=True),
-    sa.Column('image', sa.String(length=256), nullable=True),
+    sa.Column('image_pc', sa.String(length=256), nullable=True),
+    sa.Column('image_stress', sa.String(length=256), nullable=True),
     sa.Column('pac', sa.Boolean(), nullable=True),
     sa.Column('pvc', sa.Boolean(), nullable=True),
+    sa.Column('rri_avg', sa.Integer(), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
@@ -78,9 +80,11 @@ def upgrade():
     sa.Column('measured_date', sa.String(length=32), nullable=True),
     sa.Column('stress', sa.Boolean(), nullable=True),
     sa.Column('arrhythmia', sa.Boolean(), nullable=True),
-    sa.Column('image', sa.String(length=256), nullable=True),
+    sa.Column('image_pc', sa.String(length=256), nullable=True),
+    sa.Column('image_stress', sa.String(length=256), nullable=True),
     sa.Column('pac', sa.Boolean(), nullable=True),
     sa.Column('pvc', sa.Boolean(), nullable=True),
+    sa.Column('rri_avg', sa.Integer(), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['test_user.id'], ),

@@ -37,9 +37,11 @@ class EcgMixin:
     measured_date = db.Column(db.String(32))
     stress = db.Column(db.Boolean, default = False)
     arrhythmia = db.Column(db.Boolean, default = False)
-    image = db.Column(db.String(256))
+    image_pc = db.Column(db.String(256))
+    image_stress = db.Column(db.String(256))
     pac = db.Column(db.Boolean, default = False)
     pvc = db.Column(db.Boolean, default = False)
+    rri_avg = db.Column(db.Integer, default = False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
 class TestEcgModel(EcgMixin, db.Model):
