@@ -348,6 +348,11 @@
                         {% if not ecgs1 %}
                             <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
+                        <body>
+                          matplotlib 으로부터 만들어진 이미지
+                          <p><br>
+                            <img src="{{ url_for('index.plot') }}" alt="Image Placeholder">
+                        </body>
                         <table class="table" style="width:150%; float:left; margin:5px;" >
                         <thead class="thead-dark">
                             <tr align="left">
@@ -369,11 +374,6 @@
                         </tbody>
                         </table>
                         <br>
-                        <body>
-                          matplotlib 으로부터 만들어진 이미지
-                          <p><br>
-                            <img src="{{ url_for('index.plot') }}" alt="Image Placeholder">
-                        </body>
                         {% endif %}
                 </div>
             </div>

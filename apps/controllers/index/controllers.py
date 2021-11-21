@@ -20,8 +20,11 @@ from apps.service.pc_service import calculatePc
 
 app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static')
 font_path = 'C:\Windows\Fonts\HancomEQN.ttf'
-font = font_manager.FontProperties(fname=font_path).get_name()
-plt.rc('font', family=font)
+#font = font_manager.FontProperties(fname=font_path)
+#font = font_manager.FontProperties(fname=font_path).get_name()
+#rc('font', family=font)
+plt.rc('font', family='Malgun Gothic')
+plt.rcParams['axes.unicode_minus'] = False
 
 @app.route('', methods=['GET'])
 @signin_required
@@ -51,7 +54,6 @@ def plot():
         nnnnnnnn = str(stress[0][i])
         aa.append(nnnnnnnn) # 장소
         bb.append(int(stress[1][i])) # 수치
-    fig = plt.figure()
     plt.plot(aa, bb, '^', color = 'violet', label = 'RRI Avg') # 각 데이터 
     plt.axhline(431.36877612981704, color = 'purple', linewidth = 2, label = 'Threshold') #안정적 상태의 문턱치
     plt.xlabel('Place')
@@ -60,10 +62,9 @@ def plot():
     #plt.savefig('/Users/Pc/vsc/Backend-Flask/static/tmp_images/new_plot.png')
     #result = mpld3.fig_to_html(fig)
     img = BytesIO()
-    del img
     plt.savefig(img, format='png',dpi=200)
     img.seek(0)
-    fig.close()
+    plt.close()
     #return Response(result)
     return send_file(img, mimetype='image/png')
 
