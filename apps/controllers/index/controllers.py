@@ -19,10 +19,7 @@ from io import BytesIO
 from apps.service.pc_service import calculatePc
 
 app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static')
-font_path = 'C:\Windows\Fonts\HancomEQN.ttf'
-#font = font_manager.FontProperties(fname=font_path)
-#font = font_manager.FontProperties(fname=font_path).get_name()
-#rc('font', family=font)
+
 plt.rc('font', family='Malgun Gothic')
 plt.rcParams['axes.unicode_minus'] = False
 
