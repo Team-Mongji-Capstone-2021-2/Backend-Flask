@@ -16,6 +16,7 @@ from flask_login import current_user
 from apps.database.models import Ecg, User
 
 bucket_name = 'capstone-heartbeat-s3'
+plt.rcParams['font.family'] = 'NanumGothic'
 
 def no(result_c, x):
     sum_c = 0
@@ -377,8 +378,6 @@ def main2(data2, dates, n):
     s3 = boto3.client('s3')
 
     plt.savefig(os.path.join(my_path, my_file), dpi=80)
-    #s3.upload_file('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
-    #os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
 
     s3.upload_file('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
     os.remove('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
@@ -397,10 +396,10 @@ def main2(data2, dates, n):
         pvc = True
         pac = False
     plt.close()
-    return pac, pvc, threshold, image_url_pc
+    return pac, pvc, threshold, stress, image_url_pc
 
 
 def calculatePc(data2, dates):
-    pac, pvc, threshold, image_url_pc = main2(data2, dates, 0.7)
+    pac, pvc, threshold, stress, image_url_pc = main2(data2, dates, 0.7)
 
-    return pac, pvc, threshold, image_url_pc
+    return pac, pvc, threshold, stress, image_url_pc

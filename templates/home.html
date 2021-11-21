@@ -368,6 +368,12 @@
                             {% endfor %}
                         </tbody>
                         </table>
+                        <br>
+                        <body>
+                          matplotlib 으로부터 만들어진 이미지
+                          <p><br>
+                            <img src="{{ url_for('index.plot') }}" alt="Image Placeholder">
+                        </body>
                         {% endif %}
                 </div>
             </div>
