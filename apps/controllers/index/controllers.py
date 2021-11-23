@@ -81,13 +81,12 @@ def create():
         data2 = data2.reset_index()
         data2 = data2.drop(['index'], axis = 1)
     
-
         pac, pvc, threshold, stress, image_url_pc = calculatePc(data2, dates)
 
         pc = False
         if(pac == True or pvc == True): pc = True
         
-        ecg = Ecg(local=threshold[0][0], user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, stress=stress, rri_avg=threshold[0][1], image_pc = image_url_pc, measured_date=dates[0], created_date = datetime.now)
+        ecg = Ecg(local=form.local.data, user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, stress=stress, rri_avg=threshold[0][1], image_pc = image_url_pc, measured_date=dates[0], created_date = datetime.now)
         db.session.add(ecg)
         db.session.commit()
         
