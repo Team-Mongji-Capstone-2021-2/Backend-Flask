@@ -233,14 +233,14 @@
         </ol>
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <img src="static/images/설명.PNG" class="d-block w-100" alt="...">
+            <img src="static/images/프로젝트설명1.PNG" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
               <h5 style="color: black; font-weight:bold;">프로젝트 소개1</h5>
               <p style="color: black; font-weight:bold;">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
             </div>
           </div>
           <div class="carousel-item">
-            <img src="static/images/team.PNG" class="d-block w-100" alt="...">
+            <img src="static/images/프로젝트설명2.PNG" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
               <h5 style="color: black; font-weight:bold;">프로젝트 소개2</h5>
               <p style="color: black; font-weight:bold;">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</p>
@@ -279,7 +279,7 @@
                 <div>
                   <br><br>
                     <p id="ecg" class="left100">
-                        <img style="width:800px; " src="{{ ecg.image }}">
+                        <img style="width:800px; " src="{{ ecg.image_pc }}">
                     </p>
                 </div>
 
@@ -348,7 +348,10 @@
                         {% if not ecgs1 %}
                             <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
-                        <table class="table" style="width:150%; float:left; margin:5px;" >
+                        <body>
+                            <img src="{{ url_for('index.plot') }}" alt="Image Placeholder" style="float: left; width:1200px; height:1000px;">
+                        </body>
+                        <table class="table" style="width:300%; float:right; margin:50px;" >
                         <thead class="thead-dark">
                             <tr align="left">
                                 <th>순위</th>
@@ -368,6 +371,7 @@
                             {% endfor %}
                         </tbody>
                         </table>
+                        <br>
                         {% endif %}
                 </div>
             </div>

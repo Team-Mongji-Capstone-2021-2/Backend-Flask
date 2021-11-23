@@ -16,6 +16,7 @@ from flask_login import current_user
 from apps.database.models import Ecg, User
 
 bucket_name = 'capstone-heartbeat-s3'
+plt.rcParams['font.family'] = 'NanumGothic'
 
 def no(result_c, x):
     sum_c = 0
@@ -253,6 +254,8 @@ def PC(tmp, result, x, a, b, p_peak, q_peak, nn, nname, n, plot_num, dates):
         if (inter[i]-rri_avg < 0) and (abs(inter[i]-rri_avg) >= rri_avg*n): # 0.1
             count_pc += 1
             pv_all_cnt.append(i)
+    count_pc
+
     
     if pv_all_cnt:
         for j in range(len(pv_all_cnt)):
@@ -268,7 +271,8 @@ def PC(tmp, result, x, a, b, p_peak, q_peak, nn, nname, n, plot_num, dates):
         pon_idx, poff_idx, pvc = onoffset(x, a, b, p_peak, q_peak, nn, nname, dates)
         pc = False
         pvc = False 
-       
+        
+        
         
     r_list=np.array(tmp[result])
     r_avg=r_list.mean()
@@ -280,7 +284,7 @@ def PC(tmp, result, x, a, b, p_peak, q_peak, nn, nname, n, plot_num, dates):
     if pc == True:  
         if not p_peak:
             pvc  = True 
-    return pc, pac, pvc, pon_idx, poff_idx, plot_idx
+    return pc, pac, pvc, pon_idx, poff_idx, plot_idx, rri_avg
 
 def width(all_peak):
     Q, T = [], []
@@ -306,6 +310,7 @@ def main2(data2, dates, n):
     all_peak_all = []
     name_n = 1
     tmp = data2[0]
+    threshold = []
     total, result = box(tmp)
     num, peak_num=0, 1
     plot_num = 0
@@ -313,6 +318,8 @@ def main2(data2, dates, n):
     pac_plot = []
     pvc_plot = []
     all_peak = []
+    stable_threshold = 431.36877612981704
+    stress = False
     for a, b in total:
         x = []
         x = tmp[a:b]
@@ -320,12 +327,13 @@ def main2(data2, dates, n):
         second = (r+a)//2
         third = (r+len(x)//4)
         end = x.last_valid_index()
+        plt.show()
         peak_set = find_peak(x, r, second, third, end,a, 0, dates)
         if peak_set == 0 and peak_num == 0:
             if peak_num == 0:
                 peak_num = 1
         else:
-            pc, pac, pvc, pon_idx, poff_idx, plot_set = PC(tmp, result, x, a, b, peak_set[0], peak_set[1], 0, peak_set[-1], n, plot_num, dates)
+            pc, pac, pvc, pon_idx, poff_idx, plot_set, rri_avg = PC(tmp, result, x, a, b, peak_set[0], peak_set[1], 0, peak_set[-1], n, plot_num, dates)
             peak_set = peak_set + [pon_idx, poff_idx, pc, pac, pvc, plot_set]
             all_peak_all.append(peak_set)
             all_peak.append(peak_set)
@@ -341,7 +349,11 @@ def main2(data2, dates, n):
         num+=1
         plot_num +=1
         peak_num += 1
-        
+    place = '집'
+    threshold.append([place, rri_avg])  
+    
+    if rri_avg <= stable_threshold:
+        stress = True
     pvc_sub, pvc_qrs = width(all_peak)
     if pvc_qrs and (pvc and pvc_sub):
         if pc == True: 
@@ -358,22 +370,21 @@ def main2(data2, dates, n):
                 plt.plot(tmp[pvc_plot[j][0]:pvc_plot[j][1]], color = 'b')
         
     name_n += 1
-    plt.plot(tmp, 'k')
     image_now = datetime.now()
     image_number = image_now.isoformat()[2:4]+ image_now.isoformat()[5:7] + image_now.isoformat()[8:10] + image_now.isoformat()[11:13] + image_now.isoformat()[14:16] + image_now.isoformat()[17:19]
-    #my_path = os.path.abspath('/Users/Pc/vsc/Backend-Flask/static/tmp_images')
-    my_path = os.path.abspath('/home/ubuntu/Backend-Flask/static/tmp_images')
+    my_path = os.path.abspath('/Users/Pc/vsc/Backend-Flask/static/tmp_images')
+    #my_path = os.path.abspath('/home/ubuntu/Backend-Flask/static/tmp_images')
     my_file = 'graph' + str(image_number)+'.png'
     s3 = boto3.client('s3')
 
     plt.savefig(os.path.join(my_path, my_file), dpi=80)
-    #s3.upload_file('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
-    #os.remove('C:/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
 
-    s3.upload_file('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
-    os.remove('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
+    s3.upload_file('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
+    os.remove('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
+    #s3.upload_file('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
+    #os.remove('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
 
-    image_url = 'https://capstone-heartbeat-s3.s3.ap-northeast-2.amazonaws.com/graph'+ str(image_number) +'.png'
+    image_url_pc = 'https://capstone-heartbeat-s3.s3.ap-northeast-2.amazonaws.com/graph'+ str(image_number) +'.png'
     pvc_cnt = 0
     all_peak_all = pd.DataFrame(all_peak_all, columns = ['P', 'Q', 'R', 'S', 'T', 'id', 'ponset', 'poffset', 'pc', 'pac', 'pvc', 'plot_idx'])
     for i in range(len(all_peak_all)):
@@ -387,10 +398,10 @@ def main2(data2, dates, n):
         pvc = True
         pac = False
     plt.close()
-    return pc, pac, pvc, image_url
+    return pac, pvc, threshold, stress, image_url_pc
 
 
 def calculatePc(data2, dates):
-    pc, pac, pvc, image_url = main2(data2, dates, 0.7)
+    pac, pvc, threshold, stress, image_url_pc = main2(data2, dates, 0.7)
 
-    return pc, pac, pvc, image_url
+    return pac, pvc, threshold, stress, image_url_pc
