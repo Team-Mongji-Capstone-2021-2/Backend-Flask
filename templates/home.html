@@ -11,13 +11,6 @@
   <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
   <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="/static/js/jquery.min.js"></script>
-  <script src="/static/js/popper.min.js"></script>
-  <script src="/static/js/bootstrap/bootstrap.min.js"></script>
-    var ctx1 = document.getElementById("myChart1");
-    var myPieChart = new Chart(ctx1, { type: 'pie', data: data, options: {} }); // 도넛형 차트
-    var ctx2 = document.getElementById("myChart2");
-    var myDoughnutChart = new Chart(ctx2, { type: 'doughnut', data: data, options: {} }); </script>
 
   <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -352,21 +345,19 @@
             <hr>
             <br><br>
 
-                <div class="container">
+            
                     <div class="row">
+                      <div class="left50" >
                         {% if not ecgs1 %}
                             <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
-
                         <div>
                             <img src="{{ url_for('index.plot') }}" alt="Image Placeholder" style="float: left; width:1200px; height:1000px;">
-                            <div class="wrapper">
-                           <div class="left50" >
-                        <div class="col-lg-6"> <div class="card"> <div class="card-body"> <canvas id="myChart2"></canvas> </div> <div class="card card-body text-center bg-primary"> <h3>Doughnut</h3> </div> </div> </div>
-                       </div>
-                        </div>
-
-                        <table class="table" style="width:300%; float:right; margin:50px;" >
+                          </div>
+                            <div style="clear:both;"></div>
+                            <div class="left50" >
+                        <br><br>
+                        <table class="table" style="width:400%; margin-left:60px" >
                         <thead class="thead-dark">
                             <tr align="left">
                                 <th>순위</th>
@@ -386,11 +377,12 @@
                             {% endfor %}
                         </tbody>
                         </table>
+                        </div>
                         <br>
                         {% endif %}
                 </div>
             </div>
-                </div>
+                
         </ul>
     </div>
     <div style="clear:both;"></div>
@@ -405,6 +397,22 @@
              <hr><br>
                 {% if not ecgs1 %}
                         <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
+                        <br>
+                        <canvas id="myChart" width="400" height="400"></canvas> 
+                        <script> 
+                        var ctx = document.getElementById('myChart').getContext('2d'); 
+                        var myChart = new Chart(ctx, { type: 'bar', data: { labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'], 
+                        datasets: [{ 
+                          label: '# of Votes', 
+                          data: [12, 19, 3, 5, 2, 3], 
+                          backgroundColor: [ 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)' ], 
+                          borderColor: [ 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)' ], 
+                          borderWidth: 1 }] }, 
+                          options: { scales: { y: { beginAtZero: true } } 
+                          } 
+                          }); 
+                        </script>
+
                 {% else %}
                   {% if row == None %}
                   <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  부정맥이 검출된 데이터가 없습니다.</a></h2>
@@ -441,7 +449,7 @@
      </div>
      <div style="clear:both;"></div>
      <br><br>
- 
+
 </body>
 </html>
 {% endblock %}
@@ -465,4 +473,5 @@
     })
   }
 </script>
+
 {% endblock %}
