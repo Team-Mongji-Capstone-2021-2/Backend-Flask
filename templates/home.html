@@ -2,14 +2,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
   <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="/static/js/jquery.min.js"></script>
   <script src="/static/js/popper.min.js"></script>
   <script src="/static/js/bootstrap/bootstrap.min.js"></script>
+    var ctx1 = document.getElementById("myChart1");
+    var myPieChart = new Chart(ctx1, { type: 'pie', data: data, options: {} }); // 도넛형 차트
+    var ctx2 = document.getElementById("myChart2");
+    var myDoughnutChart = new Chart(ctx2, { type: 'doughnut', data: data, options: {} }); </script>
 
   <title>ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</title>
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -104,6 +112,7 @@
      .right100{float:right; margin-right:100px}
      #googl{font-family: 'Bebas Neue', cursive;}
 
+
      table.type04 {
        border-collapse: separate;
        border-spacing: 1px;
@@ -173,7 +182,7 @@
         width: auto;
         height: 100%;
         }
-      
+
      .font_white{font-family:verdana; font-weight:bold; color:black; margin-left:100px;}
      .page{font-size:40px; color: #82DBF6;}
      .page_font{font-size:30px; color: black;}
@@ -191,6 +200,7 @@
     <!--헤더-->
     <div class="main_box">
         <div class="menu common" href="#"><p  class="content">ECG ARRHYTHMIA</p></div>
+
 
         <div id="menu">
           <ul>
@@ -289,7 +299,7 @@
                       <div><a href="{{ url_for('index.create') }}"><img src="https://img.icons8.com/ios-glyphs/30/000000/add-database.png"/></a><a>  데이터 추가</a></div>
                       <div><a href="#" onclick="delete_ecg('{{ ecg.id }}')"><img src="https://img.icons8.com/ios-glyphs/30/000000/delete-database.png"/></a><a>  데이터 삭제</a></div>
                     </div>
-                    
+
                     <div style="clear:both;"></div>
                     <hr align="left" color="black" style="width: 70%;" noshade>
                     <br>
@@ -335,22 +345,27 @@
     <div style="clear:both;"></div>
     <br><br><br><br><br>
 
-
       <!--두번째 page-->
     <div>
         <ul>
           <h1 class="font_white"> 1 <span class="page">2</span> 3 <span class="page_font">  스트레스 받는 장소 순위 불러오기</span></h1>
             <hr>
             <br><br>
-            
+
                 <div class="container">
                     <div class="row">
                         {% if not ecgs1 %}
                             <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
-                        <body>
+
+                        <div>
                             <img src="{{ url_for('index.plot') }}" alt="Image Placeholder" style="float: left; width:1200px; height:1000px;">
-                        </body>
+                            <div class="wrapper">
+                           <div class="left50" >
+                        <div class="col-lg-6"> <div class="card"> <div class="card-body"> <canvas id="myChart2"></canvas> </div> <div class="card card-body text-center bg-primary"> <h3>Doughnut</h3> </div> </div> </div>
+                       </div>
+                        </div>
+
                         <table class="table" style="width:300%; float:right; margin:50px;" >
                         <thead class="thead-dark">
                             <tr align="left">
@@ -375,10 +390,12 @@
                         {% endif %}
                 </div>
             </div>
+                </div>
         </ul>
     </div>
     <div style="clear:both;"></div>
     <br><br><br><br><br>
+
 
      <!--세번째 page-->
      <br>
@@ -416,6 +433,8 @@
                   {% endfor %}
                 {% endif %}
               {% endif %}
+
+         </ul>
                  </div>
              </div>
          </ul>
