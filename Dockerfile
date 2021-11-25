@@ -9,8 +9,8 @@ RUN apt-get -y update
 RUN apt-get -y install python3-pip
 
 # flask
-RUN git clone https://github.com/Team-Mongji-Capstone-2021-2/Backend-Flask.git
 WORKDIR /root/flask
+COPY ./ /root/flask
 RUN pip install virtualenv
 RUN virtualenv venv
 RUN . venv/bin/activate

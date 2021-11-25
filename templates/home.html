@@ -112,6 +112,7 @@
      .right100{float:right; margin-right:100px}
      #googl{font-family: 'Bebas Neue', cursive;}
 
+
      table.type04 {
        border-collapse: separate;
        border-spacing: 1px;
@@ -195,10 +196,11 @@
 
     {% block body %}
     {% import 'layout/pagination.html' as macros %}
-
+    
     <!--헤더-->
     <div class="main_box">
         <div class="menu common" href="#"><p  class="content">ECG ARRHYTHMIA</p></div>
+
 
         <div id="menu">
           <ul>
@@ -343,7 +345,6 @@
     <div style="clear:both;"></div>
     <br><br><br><br><br>
 
-
       <!--두번째 page-->
     <div>
         <ul>
@@ -356,6 +357,7 @@
                         {% if not ecgs1 %}
                             <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
+
                         <div>
                             <img src="{{ url_for('index.plot') }}" alt="Image Placeholder" style="float: left; width:1200px; height:1000px;">
                             <div class="wrapper">
@@ -363,6 +365,7 @@
                         <div class="col-lg-6"> <div class="card"> <div class="card-body"> <canvas id="myChart2"></canvas> </div> <div class="card card-body text-center bg-primary"> <h3>Doughnut</h3> </div> </div> </div>
                        </div>
                         </div>
+
                         <table class="table" style="width:300%; float:right; margin:50px;" >
                         <thead class="thead-dark">
                             <tr align="left">
@@ -387,10 +390,12 @@
                         {% endif %}
                 </div>
             </div>
+                </div>
         </ul>
     </div>
     <div style="clear:both;"></div>
     <br><br><br><br><br>
+
 
      <!--세번째 page-->
      <br>
@@ -428,13 +433,15 @@
                   {% endfor %}
                 {% endif %}
               {% endif %}
+
+         </ul>
                  </div>
              </div>
          </ul>
      </div>
      <div style="clear:both;"></div>
      <br><br>
-
+ 
 </body>
 </html>
 {% endblock %}

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-
 import flask_login
-
+from flask_sqlalchemy import SQLAlchemy
 from apps.database.session import db, login_manager
 from config import JsonConfig
 
@@ -32,31 +31,32 @@ Test = get_model(TestModel)
 
 
 
-class DatainfoMixin: #데이터 모델을 나타내는 객체 선언
+class EcgMixin:
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     local = db.Column(db.String(32))
-    time = db.Column(db.String(32))
-    stressData = db.Column(db.Boolean, default = False)
+    measured_date = db.Column(db.String(32))
+    stress = db.Column(db.Boolean, default = False)
     arrhythmia = db.Column(db.Boolean, default = False)
-    image = db.Column(db.String(256))
+    image_pc = db.Column(db.String(256))
+    image_stress = db.Column(db.String(256))
     pac = db.Column(db.Boolean, default = False)
     pvc = db.Column(db.Boolean, default = False)
-    rbbb = db.Column(db.Boolean, default = False)
-    lbbb = db.Column(db.Boolean, default = False)
+    rri_avg = db.Column(db.Integer, default = False)
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
-class TestDatainfoModel(DatainfoMixin, db.Model):
-    __tablename__ = 'test_datainfos'
+class TestEcgModel(EcgMixin, db.Model):
+    __tablename__ = 'test_ecg'
 
-    user_id = db.Column(db.Integer(), db.ForeignKey('test_users.id'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('test_user.id'))
 
-class DatainfoModel(DatainfoMixin, db.Model):
-    __tablename__ = 'datainfos'
+class EcgModel(EcgMixin, db.Model):
+    __tablename__ = 'ecg'
 
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
 
-    test_model = TestDatainfoModel
+    test_model = TestEcgModel
 
-Datainfo = get_model(DatainfoModel)
+Ecg = get_model(EcgModel)
 
 
 
@@ -69,16 +69,18 @@ class UserMixin:
     height = db.Column(db.Integer, nullable=False)
     weight = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(8), nullable=False)
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    modified_date = db.Column(db.DateTime, nullable=True)
 
 class TestUserModel(UserMixin, flask_login.UserMixin, db.Model):
-    __tablename__ = 'test_users'
+    __tablename__ = 'test_user'
 
-    datas = db.relationship('TestDatainfoModel', backref = 'user')
+    ecg = db.relationship('TestEcgModel', backref = 'user')
 
 class UserModel(UserMixin, flask_login.UserMixin, db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
-    datainfos = db.relationship('DatainfoModel', backref ='user')
+    ecg = db.relationship('EcgModel', backref ='user')
 
     test_model = TestUserModel
 

@@ -10,8 +10,8 @@
       <div class="col-lg-4">
         <div class="card">
           <div class="card-body text-center">
-            <h6 class="mt-2">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h4>
-            <h5 class="mt-2">데이터 입력</h5>
+            <h5 class="mt-2">ECG 실시간 부정맥 검출 & 공간에 따른 스트레스 분석</h5><br>
+            <h6 class="mt-2">Please Input Data</h6>
             <form enctype="multipart/form-data" action = "/index/create" method = "post">
               {{ form.hidden_tag() }}
               <div class="form-group">
@@ -19,15 +19,17 @@
                 <div class="invalid-feedback d-block text-left">
                   {{ form.local.errors[0] }}
                 </div>
+                <br>
                 <div class="form-group">
-                  <label>Upload csv file</label>
+                  <h5 class="mt-2">csv 파일 업로드</h5>
                   {{ form.datafile(class="file-input") }}
                   <div class="invalid-feedback d-block text-left">
                     {{ form.datafile.errors[0] }}
               </div>
+              <br>
               <input type="submit" value="데이터 추가" class="form-control btn" style="background-color: #ee8978; color: white">
             </form>
-
+            <br><br>
             <a href="/index" class="text-left"><p class="small">홈화면으로</p></a>
           </div>
         </div>
