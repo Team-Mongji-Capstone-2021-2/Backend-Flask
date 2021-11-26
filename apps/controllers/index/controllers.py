@@ -33,13 +33,22 @@ def index():
     pagination1 = Ecg.query.filter(Ecg.user_id == current_user.id).order_by(Ecg.id.desc()).paginate(page, per_page, error_out=False)
     ecgs1 = pagination1.items
 
-    ecgs2 = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local limit 5', {'id': current_user.id})
+    ecgs2_test = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local limit 5', {'id': current_user.id})
+    stress_count = []
+    stress_local = []
+    for ecg in ecgs2_test:
+        if (ecg.stress_count / ecg.count) > 0:
+            stress_count.append(round((ecg.stress_count / ecg.count), 2))
+            stress_local.append(ecg.local)
+    print("=================================")
+    print(stress_count)
 
-    #pagination3 = Datainfo.query.filter(Datainfo.user_id == current_user.id, Datainfo.arrhythmia == True).order_by(Datainfo.id.desc()).first()
+    ecgs2 = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local limit 5', {'id': current_user.id})
+    
     ecgs3 = db.session.execute('select * from ecg where ecg.user_id = :id and ecg.arrhythmia = 1 order by id desc limit 3', {'id': current_user.id})
     row = ecgs3.fetchone()
     
-    return render_template('home.html', ecgs1=ecgs1, pagination1=pagination1, ecgs2=ecgs2, ecgs3=ecgs3, row=row)
+    return render_template('home.html', ecgs1=ecgs1, pagination1=pagination1, ecgs2=ecgs2, ecgs3=ecgs3, row=row, stress_count=stress_count, stress_local=stress_local)
 
 @app.route('/plot')
 def plot():
