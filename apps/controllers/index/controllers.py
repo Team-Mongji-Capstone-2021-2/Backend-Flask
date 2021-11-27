@@ -21,7 +21,7 @@ from apps.service.pc_service import calculatePc
 app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static')
 
 path = '/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf'
-fontprop = fm.FontProperties(fname=path, size=18)
+fontprop = font_manager.FontProperties(fname=path, size=18)
 
 @app.route('', methods=['GET'])
 @signin_required
