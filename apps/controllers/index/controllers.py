@@ -23,7 +23,7 @@ app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static
 font_fname = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
 font_name = font_manager.FontProperties(fname=font_fname).get_name()
 
-plt.rc('font', family=font_name)
+rc('font', family=font_name)
 
 #plt.rcParams["font.family"] = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
 
