@@ -1,7 +1,7 @@
 from boto3 import session
 from sqlalchemy import func
 import pandas as pd
-import matplotlib.pyplot as plt, mpld3
+import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 from datetime import datetime
 from flask import Blueprint, render_template, redirect, request, url_for, abort, send_file, Response
