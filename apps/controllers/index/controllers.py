@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
-matplotlib.font_manager._rebuild()
 from datetime import datetime
 from flask import Blueprint, render_template, redirect, request, url_for, abort, send_file, Response
 from wtforms.validators import Email
