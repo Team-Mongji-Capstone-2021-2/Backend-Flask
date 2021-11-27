@@ -20,7 +20,7 @@ from apps.service.pc_service import calculatePc
 
 app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static')
 
-plt.rc('font', family='Malgun Gothic')
+plt.rc('font', family='nanumc')
 plt.rcParams['axes.unicode_minus'] = False
 
 @app.route('', methods=['GET'])
@@ -68,7 +68,6 @@ def plot():
     plt.savefig(img, format='png',dpi=200)
     img.seek(0)
     plt.close()
-    #return Response(result)
     return send_file(img, mimetype='image/png')
 
 @app.route('/create', methods=['GET','POST'])
