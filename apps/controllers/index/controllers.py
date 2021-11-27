@@ -20,13 +20,12 @@ from apps.service.pc_service import calculatePc
 
 app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static')
 
-#path = '/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf'
-#fontprop = font_manager.FontProperties(fname=path, size=18)
+font_fname = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+font_name = font_manager.FontProperties(fname=font_fname).get_name()
 
-plt.rc('font', family='Malgun Gothic')
-plt.rcParams['axes.unicode_minus'] = False
+plt.rc('font', family=font_name)
 
-#plt.rcParams["font.family"] = '/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf'
+#plt.rcParams["font.family"] = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
 
 @app.route('', methods=['GET'])
 @signin_required
