@@ -23,7 +23,7 @@ app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static
 #path = '/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf'
 #fontprop = font_manager.FontProperties(fname=path, size=18)
 
-plt.rc('font', family='/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf')
+plt.rc('font', family='Malgun Gothic')
 plt.rcParams['axes.unicode_minus'] = False
 
 #plt.rcParams["font.family"] = '/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf'
