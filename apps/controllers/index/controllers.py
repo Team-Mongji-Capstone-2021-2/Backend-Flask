@@ -40,8 +40,6 @@ def index():
         if (ecg.stress_count / ecg.count) > 0:
             stress_count.append(round((ecg.stress_count / ecg.count), 2))
             stress_local.append(ecg.local)
-    print("=================================")
-    print(stress_count)
 
     ecgs2 = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local limit 5', {'id': current_user.id})
     
@@ -66,8 +64,6 @@ def plot():
     plt.xlabel('Place')
     plt.ylabel('RRI Avg')
     plt.legend(loc='upper right')
-    #plt.savefig('/Users/Pc/vsc/Backend-Flask/static/tmp_images/new_plot.png')
-    #result = mpld3.fig_to_html(fig)
     img = BytesIO()
     plt.savefig(img, format='png',dpi=200)
     img.seek(0)
