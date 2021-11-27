@@ -379,10 +379,10 @@ def main2(data2, dates, n):
 
     plt.savefig(os.path.join(my_path, my_file), dpi=80)
 
-    s3.upload_file('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
-    os.remove('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
-    #s3.upload_file('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
-    #os.remove('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
+    #s3.upload_file('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
+    #os.remove('/Users/Pc/vsc/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
+    s3.upload_file('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png', bucket_name, my_file)
+    os.remove('/home/ubuntu/Backend-Flask/static/tmp_images/graph'+ str(image_number) +'.png')
 
     image_url_pc = 'https://capstone-heartbeat-s3.s3.ap-northeast-2.amazonaws.com/graph'+ str(image_number) +'.png'
     pvc_cnt = 0
