@@ -66,7 +66,8 @@ def plot():
         nnnnnnnn = str(stress[0][i])
         aa.append(nnnnnnnn) # 장소
         bb.append(int(stress[1][i])) # 수치
-
+        
+    plt.rcParams["font.family"] = 'NanumGothic'
     plt.plot(aa, bb, '^', color = 'violet', label = 'RRI Avg') # 각 데이터
     plt.axhline(431.36877612981704, color = 'purple', linewidth = 2, label = 'Threshold') #안정적 상태의 문턱치
     plt.xlabel('Place')
