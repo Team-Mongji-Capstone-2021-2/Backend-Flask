@@ -372,8 +372,8 @@ def main2(data2, dates, n):
     name_n += 1
     image_now = datetime.now()
     image_number = image_now.isoformat()[2:4]+ image_now.isoformat()[5:7] + image_now.isoformat()[8:10] + image_now.isoformat()[11:13] + image_now.isoformat()[14:16] + image_now.isoformat()[17:19]
-    my_path = os.path.abspath('/Users/Pc/vsc/Backend-Flask/static/tmp_images')
-    #my_path = os.path.abspath('/home/ubuntu/Backend-Flask/static/tmp_images')
+    #my_path = os.path.abspath('/Users/Pc/vsc/Backend-Flask/static/tmp_images')
+    my_path = os.path.abspath('/home/ubuntu/Backend-Flask/static/tmp_images')
     my_file = 'graph' + str(image_number)+'.png'
     s3 = boto3.client('s3')
 

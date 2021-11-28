@@ -80,7 +80,7 @@
     #menu > ul > li {
         float:left;
         width:50px;
-        top:9px;
+        top:1px;
         position:relative;
     }
     #menu > ul > li > ul {
@@ -344,21 +344,26 @@
           <h1 class="font_white"> 1 <span class="page">2</span> 3 <span class="page_font">  스트레스 받는 장소 순위 불러오기</span></h1>
             <hr>
             <br><br>
+            
                     <div class="row">
-                      <div class="left50" >
+                      
+                      
                         {% if not ecgs1 %}
                           <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
                         {% else %}
+                        <div class="wrapper">
                           <div>
-                            <img src="{{ url_for('index.plot') }}" alt="Image Placeholder" style="float: left; width:1000px; height:800px;">
+                            <img src="{{ url_for('index.plot') }}" alt="Image Placeholder" style="float: left; margin-left:120px; width:900px; height:800px;">
                           </div>
                           <div>
-                            <canvas id = "myChart" style="float: right;"></canvas>
+                            <br><br><br><br><br>
+                            <canvas id = "myChart" style="float: left;  width:1000px;"></canvas>
+                          </div>
                           </div>
                           <div style="clear:both;"></div>
                           <div class="left50" >
-                          
-                          <table class="table" style="width:300%; margin-left:60px" >
+                          <br><br><br>
+                          <table class="table" style="width:300%; margin-left:110px" >
                           <thead class="thead-dark">
                             <tr align="left">
                               <th>순위</th>
@@ -378,7 +383,7 @@
                           {% endfor %}
                       </tbody>
                       </table>
-                      </div>
+                     
                       <br>
                       {% endif %}
                 </div>
@@ -394,7 +399,7 @@
      <br>
      <div>
          <ul>
-          <h1 class="font_white"> 1 2 <span class="page">3</span> <span class="page_font"> 부정맥 데이터만 불러오기</span></h1>
+          <h1 class="font_white"> 1 2 <span class="page">3</span> <span class="page_font"> 부정맥 데이터 검출 시간 및 장소</span></h1>
              <hr><br>
                 {% if not ecgs1 %}
                         <h2 class="text-center p-5"><a href="{{ url_for('index.create') }}" style="color: black;">  아직 데이터가 없습니다. 데이터를 추가해주세요.</a></h2>
@@ -405,7 +410,7 @@
                   {% else %}
                     {% for ecg in ecgs3 %}
                       <div class="media">
-                        <img src="{{ ecg.image }}" class="mr-3" alt="..." style="width:300px; float:left; margin:30px;" >
+                        <img src="{{ ecg.image_pc }}" class="mr-3" alt="..." style="width:300px; float:left; margin:30px;" >
                         <div class="media-body">
                         <br><br><br>
                         <h5 class="mt-0"><strong>{{ ecg.measured_date }}</strong>, <strong>{{ ecg.local }}</strong>에서 부정맥이 검출됨</h5><br>

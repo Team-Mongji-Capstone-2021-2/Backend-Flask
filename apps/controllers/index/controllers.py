@@ -1,7 +1,7 @@
 from boto3 import session
 from sqlalchemy import func
 import pandas as pd
-import matplotlib.pyplot as plt, mpld3
+import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 from datetime import datetime
 from flask import Blueprint, render_template, redirect, request, url_for, abort, send_file, Response
@@ -18,10 +18,11 @@ import os
 from io import BytesIO
 from apps.service.pc_service import calculatePc
 
+
 app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static')
 
-plt.rc('font', family='nanumc')
-plt.rcParams['axes.unicode_minus'] = False
+plt.rc('font', family='Malgun Gothic')
+plt.rcParams['axes.unicode_minus'] = False 
 
 @app.route('', methods=['GET'])
 @signin_required
@@ -59,7 +60,8 @@ def plot():
         nnnnnnnn = str(stress[0][i])
         aa.append(nnnnnnnn) # 장소
         bb.append(int(stress[1][i])) # 수치
-    plt.plot(aa, bb, '^', color = 'violet', label = 'RRI Avg') # 각 데이터 
+
+    plt.plot(aa, bb, '^', color = 'violet', label = 'RRI Avg') # 각 데이터
     plt.axhline(431.36877612981704, color = 'purple', linewidth = 2, label = 'Threshold') #안정적 상태의 문턱치
     plt.xlabel('Place')
     plt.ylabel('RRI Avg')
