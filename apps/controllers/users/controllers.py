@@ -20,9 +20,6 @@ def signin():
 
     if form.validate_on_submit():
         user = User.query.filter(User.username == form.username.data).first()
-        print("username:", user.username, ", password: ", user.password)
-        print("form_username:", form.username.data, ", form_password: ", form.password.data)
-        print(SHA256.encrypt(form.password.data))
         if not user:
             form.username.errors.append('가입하지 않은 아이디 입니다.')
             return render_template('login.html', form=form)
