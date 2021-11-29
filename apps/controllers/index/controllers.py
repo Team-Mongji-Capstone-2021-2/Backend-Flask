@@ -22,10 +22,12 @@ from apps.service.pc_service import calculatePc
 
 app = Blueprint('index', __name__, url_prefix='/index', static_url_path='/static')
 
-font_fname = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
-font_name = font_manager.FontProperties(fname=font_fname).get_name()
-rc('font', family=font_name)
+#font_fname = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+#font_name = font_manager.FontProperties(fname=font_fname).get_name()
+#rc('font', family=font_name)
 #plt.rcParams["font.family"] = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+
+plt.rcParams["font.family"] = 'NanumGothic'
 
 @app.route('', methods=['GET'])
 @signin_required
@@ -37,7 +39,7 @@ def index():
     pagination1 = Ecg.query.filter(Ecg.user_id == current_user.id).order_by(Ecg.id.desc()).paginate(page, per_page, error_out=False)
     ecgs1 = pagination1.items
 
-    ecgs2_test = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local limit 5', {'id': current_user.id})
+    ecgs2_test = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local order by (count(case when stress = 1 then 1 end) / count(*)) desc;', {'id': current_user.id})
     stress_count = []
     stress_local = []
     for ecg in ecgs2_test:
@@ -45,7 +47,7 @@ def index():
             stress_count.append(round((ecg.stress_count / ecg.count), 2))
             stress_local.append(ecg.local)
 
-    ecgs2 = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local limit 5', {'id': current_user.id})
+    ecgs2 = db.session.execute('select local as local, count(*) as count, count(case when stress = 1 then 1 end) as stress_count from ecg where ecg.user_id = :id group by local order by (count(case when stress = 1 then 1 end) / count(*)) desc;', {'id': current_user.id})
     
     ecgs3 = db.session.execute('select * from ecg where ecg.user_id = :id and ecg.arrhythmia = 1 order by id desc limit 3', {'id': current_user.id})
     row = ecgs3.fetchone()
@@ -96,7 +98,7 @@ def create():
         pc = False
         if(pac == True or pvc == True): pc = True
         
-        ecg = Ecg(local=form.local.data, user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, stress=stress, rri_avg=threshold[0][1], image_pc = image_url_pc, measured_date=dates[0], created_date = datetime.now)
+        ecg = Ecg(local=form.local.data, user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, stress=stress, rri_avg=threshold[0][1], image_pc = image_url_pc, measured_date=dates[0])
         db.session.add(ecg)
         db.session.commit()
         
