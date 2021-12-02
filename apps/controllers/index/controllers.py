@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
-from datetime import datetime
+from datetime import datetime, func
 from flask import Blueprint, render_template, redirect, request, url_for, abort, send_file, Response
 from wtforms.validators import Email
 from apps.common.auth import api_signin_required, signin_required
@@ -98,7 +98,7 @@ def create():
         pc = False
         if(pac == True or pvc == True): pc = True
         
-        ecg = Ecg(local=form.local.data, user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, stress=stress, rri_avg=threshold[0][1], image_pc = image_url_pc, measured_date=dates[0])
+        ecg = Ecg(local=form.local.data, user_id = current_user.id, pac = pac, pvc = pvc, arrhythmia=pc, stress=stress, rri_avg=threshold[0][1], image_pc = image_url_pc, measured_date=dates[0], created_date = func.now())
         db.session.add(ecg)
         db.session.commit()
         
