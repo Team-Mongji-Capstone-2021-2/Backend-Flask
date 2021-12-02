@@ -9,8 +9,6 @@ import boto3
 import os
 from PIL import Image
 from datetime import datetime
-import glob 
-import csv
 
 from flask_login import current_user
 from apps.database.models import Ecg, User
